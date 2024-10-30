@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "cars-control"
+version = "0.1.0"
+description = ""
+authors = ["Grigoriy1209 <grigoriyv1209@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+djangorestframework = "^3.15.2"
+mysqlclient = "^2.2.5"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+django-dotenv = "^1.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
