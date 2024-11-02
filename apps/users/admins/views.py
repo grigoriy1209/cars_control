@@ -29,7 +29,7 @@ class UserBanView(GenericAPIView):
 
 
 class UserUnbanView(GenericAPIView):
-    permission_classes = (IsAdminUser, IsManager, IsSuperUser)
+    permission_classes = [IsAdminUser, IsManager, IsSuperUser,]
     queryset = UserModel.objects.all()
 
     def get_queryset(self):
