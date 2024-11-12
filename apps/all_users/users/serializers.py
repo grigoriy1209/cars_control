@@ -3,7 +3,7 @@ from django.db import transaction
 
 from rest_framework import serializers
 
-from apps.users.models import ProfileModel
+from apps.all_users.users.models import ProfileModel
 
 UserModel = get_user_model()
 

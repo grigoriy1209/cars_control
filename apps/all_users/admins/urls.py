@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.users.admins.views import AdminToUserView, UserBanView, UserToAdminView, UserUnbanView
+from apps.all_users.admins.views import AdminToUserView, UserBanView, UserToAdminView, UserUnbanView
 
 urlpatterns = [
     path('/<int:pk>/ban', UserBanView.as_view(), name='user_ban'),

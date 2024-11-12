@@ -1,9 +1,10 @@
 from django.contrib.auth.models import UserManager as Manager
 
-from apps.users.choices import AccountType, UserRoleType
+from apps.all_users.users.choices import AccountType, UserRoleType
 
 
 class UserManager(Manager):
+
     def create_user(self, email=None, password=None, **extra_fields):
         if not email:
             raise ValueError('User must have an email address')
@@ -21,7 +22,6 @@ class UserManager(Manager):
         extra_fields.setdefault('is_active', True)
 
         extra_fields.setdefault('role_type', UserRoleType.ADMIN)
-        extra_fields.setdefault('account_type', AccountType.PREMIUM)
 
         if extra_fields.get('is_active') is not True:
             raise ValueError('Superuser must have is_active=True.')

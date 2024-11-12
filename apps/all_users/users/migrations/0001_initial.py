@@ -4,7 +4,7 @@ import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
-import apps.users.managers
+import apps.all_users.users.managers
 
 
 class Migration(migrations.Migration):
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 'db_table': 'auth_user',
             },
             managers=[
-                ('objects', apps.users.managers.UserManager()),
+                ('objects', apps.all_users.users.managers.UserManager()),
             ],
         ),
         migrations.CreateModel(

@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from core.permissions.is_superuser_permission import IsStaff, IsSuperUser
 
-from apps.users.serializers import UserSerializer
+from apps.all_users.users.serializers import UserSerializer
 
 UserModel = get_user_model()
 

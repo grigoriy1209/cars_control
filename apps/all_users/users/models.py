@@ -4,8 +4,8 @@ from django.db import models
 
 from core.models import BaseModel
 
-from apps.users.choices import AccountType, UserRoleType
-from apps.users.managers import UserManager
+from apps.all_users.users.choices import AccountType, UserRoleType
+from apps.all_users.users.managers import UserManager
 
 
 class UserModel(AbstractBaseUser, BaseModel, PermissionsMixin):

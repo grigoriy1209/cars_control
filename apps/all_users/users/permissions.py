@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from apps.users.choices import AccountType, UserRoleType
+from apps.all_users.users.choices import AccountType, UserRoleType
 
 
 # =============================================role_type===============================================
