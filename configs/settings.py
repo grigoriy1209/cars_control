@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # my_apps
     'core',
     'apps.all_users.users',
+    'apps.all_users.accounts',
     'apps.all_users.admins',
     'apps.all_users.auth',
 ]

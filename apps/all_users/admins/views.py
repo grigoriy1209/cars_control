@@ -2,20 +2,18 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from core.permissions.is_superuser_permission import IsSuperUser
 
-from apps.all_users.users.choices import AccountType, UserRoleType
-from apps.all_users.users.permissions import IsAdminUser, IsManager
+from apps.all_users.users.choices import UserRoleType
 from apps.all_users.users.serializers import UserSerializer
 
 UserModel = get_user_model()
 
 
 class UserBanView(GenericAPIView):
-    permission_classes = [IsAdminUser, IsManager, IsSuperUser]
+    permission_classes = [IsSuperUser]
     queryset = UserModel.objects.all()
 
     def get_queryset(self):
@@ -31,7 +29,7 @@ class UserBanView(GenericAPIView):
 
 
 class UserUnbanView(GenericAPIView):
-    permission_classes = [IsAdminUser, IsManager, IsSuperUser, ]
+    permission_classes = [IsSuperUser, ]
     queryset = UserModel.objects.all()
 
     def get_queryset(self):
@@ -46,26 +44,30 @@ class UserUnbanView(GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UserToAdminView(GenericAPIView):
-    permission_classes = [IsAdminUser, IsSuperUser]
+class UserToManagerView(GenericAPIView):
+    permission_classes = [IsSuperUser]
     queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)
 
     def patch(self, *args, **kwargs):
         user = self.get_object()
+
+        if user.role_type == UserRoleType.OWNER:
+            user.role_type = UserRoleType.MANAGER
+
         if not user.is_staff:
             user.is_staff = True
-        elif user.role_type != UserRoleType.OWNER:
-            user.role_type = UserRoleType.MANAGER
-            user.account_type = AccountType.BASIC
-            user.save()
+
+            # user.account_type = AccountType.BASIC
+        user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class AdminToUserView(GenericAPIView):
+class ManagerToUserView(GenericAPIView):
     permission_classes = (IsSuperUser,)
     queryset = UserModel.objects.all()
 
@@ -76,13 +78,8 @@ class AdminToUserView(GenericAPIView):
         user = self.get_object()
         if user.is_staff:
             user.is_staff = False
-        elif user.role_type == UserRoleType.MANAGER:
+        if user.role_type == UserRoleType.MANAGER:
             user.role_type = UserRoleType.OWNER
-            user.save()
+        user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-
-

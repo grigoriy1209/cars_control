@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from apps.all_users.users.choices import AccountType, UserRoleType
+from apps.all_users.users.choices import UserRoleType
 
 
 # =============================================role_type===============================================
@@ -25,11 +25,11 @@ class IsAdminUser(BasePermission):
 
 
 # =================================================account_type====================================================
-class IsSellerBasic(BasePermission):
-    def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and request.user.account_type == AccountType.BASIC)
-
-
-class IsSellerPremium(BasePermission):
-    def has_permission(self, request, view):
-        return bool(request.user.is_authenticated and request.user.account_type == AccountType.PREMIUM)
+# class IsSellerBasic(BasePermission):
+#     def has_permission(self, request, view):
+#         return bool(request.user.is_authenticated and request.user.account_type == AccountType.BASIC)
+#
+#
+# class IsSellerPremium(BasePermission):
+#     def has_permission(self, request, view):
+#         return bool(request.user.is_authenticated and request.user.account_type == AccountType.PREMIUM)

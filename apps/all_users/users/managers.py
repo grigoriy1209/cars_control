@@ -1,6 +1,6 @@
 from django.contrib.auth.models import UserManager as Manager
 
-from apps.all_users.users.choices import AccountType, UserRoleType
+from apps.all_users.users.choices import UserRoleType
 
 
 class UserManager(Manager):
