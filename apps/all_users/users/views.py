@@ -1,7 +1,13 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (
+    DestroyAPIView,
+    GenericAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -18,10 +24,15 @@ class UserListCreateView(ListCreateAPIView):
     permission_classes = [AllowAny]
 
 
-class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+class UserRetrieveUpdateView(RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
-    permission_classes = [AllowAny ]
+    permission_classes = [IsAuthenticated, IsSuperUser]
+
+class UserDestroyView(DestroyAPIView):
+    serializer_class = UserSerializer
+    queryset = UserModel.objects.all()
+    permission_classes = [IsAuthenticated ]
 
 
 class MeInfoView(GenericAPIView):
