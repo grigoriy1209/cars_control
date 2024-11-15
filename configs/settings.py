@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.all_users.accounts',
     'apps.all_users.admins',
     'apps.all_users.auth',
+    'apps.listings',
 ]
 
 MIDDLEWARE = [

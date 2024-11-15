@@ -5,10 +5,8 @@ from django.utils import timezone
 
 from core.models import BaseModel
 
-
-class AccountType(models.TextChoices):
-    BASIC = 'Basic'
-    PREMIUM = 'Premium'
+from apps.all_users.accounts.choices import AccountType
+from apps.all_users.accounts.managers import AccountManager
 
 
 class AccountModels(BaseModel):
@@ -23,14 +21,5 @@ class AccountModels(BaseModel):
     end_date = models.DateField(null=True, blank=True)
     active = models.BooleanField(default=True)
 
-    def activate_premium_account(self, duration_days=30):
-        self.account_type = AccountType.PREMIUM
-        self.start_date = timezone.now().date()
-        self.end_date = (timezone.now() + timedelta(days=duration_days)).date()
-        self.active = True
-        self.save()
+    objects = AccountManager()
 
-    def is_premium_active(self):
-        if self.account_type == AccountType.PREMIUM and self.end_date:
-            return self.end_date > timezone.now().date() and self.active
-        return False
