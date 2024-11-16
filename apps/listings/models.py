@@ -1,5 +1,8 @@
 from django.db import models
 
+from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+
 from core.models import BaseModel
 
 from apps.all_users.users.models import UserModel
@@ -11,6 +14,7 @@ from apps.listings.choices import (
     EngineTypeChoice,
     StatusChoice,
 )
+from apps.listings.managers import CarManager
 
 
 class CarsModel(BaseModel):
@@ -28,11 +32,12 @@ class CarsModel(BaseModel):
     eco_standard = models.CharField(max_length=25, choices=EcologicalStandardTypeChoice.choices)
     checkpoint = models.CharField(max_length=25, choices=CheckpointTypeChoice.choices)
     color = models.CharField(max_length=23)
-    status = models.CharField(max_length=20, choices=StatusChoice.choices)
+    status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
+    region = models.CharField(max_length=23)
+    edit_count = models.PositiveIntegerField(default=0)
+    edit_attempts = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
-    def save(self, *args, **kwargs):
-        if self.user.account == 'Basic' and self.user.cars.count() >= 1:
-            raise ValueError("basic account allows you to place only one ad.")
-        super().save(*args, **kwargs)
+    objects = CarManager()
+

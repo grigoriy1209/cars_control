@@ -21,7 +21,7 @@ class UserListCreateView(ListCreateAPIView):
 class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
-    permission_classes = [IsSuperUser,IsAuthenticated]
+    permission_classes = [IsSuperUser, IsAuthenticated]
 
 
 class MeInfoView(GenericAPIView):

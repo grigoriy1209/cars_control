@@ -8,5 +8,3 @@ class UserRoleType(models.TextChoices):
     MANAGER = 'Manager'
     ADMIN = 'Admin'
     OWNER = 'Owner'
-
-

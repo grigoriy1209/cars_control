@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from core.dataclasses.user_dataclass import User
 from core.services.jwt_service import ActivateToken, JWTService
 
-from apps.users.auth.serializers import EmailSerializer
-from apps.users.serializers import UserSerializer
+from apps.all_users.auth.serializers import EmailSerializer
+from apps.all_users.users.serializers import UserSerializer
 
 UserModel: User = get_user_model()
 
