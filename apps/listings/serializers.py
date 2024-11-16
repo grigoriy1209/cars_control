@@ -15,7 +15,7 @@ class CarSerializer(serializers.ModelSerializer):
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region',
                   'checkpoint', 'color', 'status', 'created_at', 'updated_at', "user", "edit_count", "edit_attempts")
-        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_count")
+        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_count", "edit_attempts")
 
     def validate(self, car):
         instance = self.instance

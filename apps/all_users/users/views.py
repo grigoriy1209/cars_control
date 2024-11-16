@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from core.pagination import PagePagination
 from core.permissions.is_superuser_permission import IsStaff, IsSuperUser
 
 from apps.all_users.users.serializers import UserSerializer
@@ -12,7 +13,7 @@ from apps.all_users.users.serializers import UserSerializer
 UserModel = get_user_model()
 
 
-class UserListCreateView(ListCreateAPIView):
+class UserCreateView(CreateAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
     permission_classes = [AllowAny]
@@ -21,6 +22,7 @@ class UserListCreateView(ListCreateAPIView):
 class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
+
     permission_classes = [IsSuperUser, IsAuthenticated]
 
 
