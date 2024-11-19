@@ -8,14 +8,15 @@ from apps.all_users.accounts.choices import AccountType
 
 class AccountManager(models.Manager):
 
-    def activate_premium_account(self, account,duration_days=30):
-        self.account.account_type = AccountType.PREMIUM
-        self.account.start_date = timezone.now().date()
-        self.account.end_date = (timezone.now() + timedelta(days=duration_days)).date()
-        self.account.active = True
-        self.save()
+    def activate_premium_account(self, account, duration_days=30):
+        account.account_type = AccountType.PREMIUM
+        account.start_date = timezone.now().date()
+        account.end_date = (timezone.now() + timedelta(days=duration_days)).date()
+        account.active = True
+        account.save()
+        return account
 
-    def is_premium_active(self):
-        if self.account_type == AccountType.PREMIUM and self.end_date:
-            return self.end_date > timezone.now().date() and self.active
+    def is_premium_active(self,account):
+        if account.account_type == AccountType.PREMIUM and account.end_date:
+            return account.end_date > timezone.now().date() and account.active
         return False

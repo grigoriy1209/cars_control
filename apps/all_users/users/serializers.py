@@ -3,6 +3,8 @@ from django.db import transaction
 
 from rest_framework import serializers
 
+from apps.all_users.accounts.choices import AccountType
+from apps.all_users.accounts.models import AccountModels
 from apps.all_users.accounts.serializers import AccountSerializer
 from apps.all_users.users.choices import UserRoleType
 from apps.all_users.users.models import ProfileModel
@@ -53,8 +55,9 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def validate_role_type(self, value):
-        if value not in [UserRoleType.SELLER, UserRoleType.BUYER]:
-            raise serializers.ValidationError("Invalid role type. It must be SELLER or BUYER ")
+        roles = [role for role in UserRoleType]
+        if value not in roles:
+            raise serializers.ValidationError("Invalid role type.")
         return value
 
     @transaction.atomic
@@ -63,7 +66,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         user = UserModel.objects.create_user(**validated_data)
         profile = ProfileModel.objects.create(**profile, user=user, )
-
+        account, created = AccountModels.objects.get_or_create(user=user, defaults={"account_type": AccountType.BASIC})
+        user.account = account
+        user.save()
         return user
 
     def update(self, instance, validated_data):
@@ -81,10 +86,11 @@ class UserSerializer(serializers.ModelSerializer):
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
+
         role_type = validated_data.pop('role_type', None)
-        if role_type not in [UserRoleType.OWNER, UserRoleType.BUYER, UserRoleType.SELLER, UserRoleType.MANAGER]:
-            raise serializers.ValidationError("Invalid role type")
         if role_type:
+            if role_type not in [UserRoleType.OWNER, UserRoleType.BUYER, UserRoleType.SELLER, UserRoleType.MANAGER]:
+                raise serializers.ValidationError("Invalid role type")
             instance.role_type = role_type
         instance.save()
         return instance

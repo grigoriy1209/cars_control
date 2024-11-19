@@ -3,6 +3,8 @@ from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 
+from rest_framework.exceptions import ValidationError
+
 from core.models import BaseModel
 
 from apps.all_users.accounts.choices import AccountType
@@ -22,4 +24,12 @@ class AccountModels(BaseModel):
     active = models.BooleanField(default=True)
 
     objects = AccountManager()
+
+    def clean(self):
+        if self.end_date and self.start_date > self.end_date:
+            raise ValidationError('End date cannot be before start date')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
