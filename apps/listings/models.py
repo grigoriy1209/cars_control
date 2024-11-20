@@ -3,20 +3,21 @@ from datetime import datetime
 from django.core import validators as V
 from django.db import models
 
+from better_profanity import profanity
+
 from core.models import BaseModel
 
 from apps.all_users.users.models import UserModel
-from apps.listings.choices import (
-    BodyTypeChoice,
-    CheckpointTypeChoice,
-    CurrencyChoice,
-    EcologicalStandardTypeChoice,
-    EngineTypeChoice,
-    StatusChoice,
-)
-from apps.listings.managers import CarManager
-from apps.listings.regex import CarRegex
-from apps.listings.services import upload_car_photos
+
+from .choices.body_type_choice import BodyTypeChoice
+from .choices.currency_choice import CurrencyChoice
+from .choices.eco_choice import EcologicalStandardTypeChoice
+from .choices.engine_choice import EngineTypeChoice
+from .choices.status_choice import StatusChoice
+from .choices.transmission_choice import CheckpointTypeChoice
+from .managers import CarManager
+from .regex import CarRegex
+from .services import CarsService
 
 
 class CarsModel(BaseModel):
@@ -50,5 +51,5 @@ class CarPhotoModel(BaseModel):
     class Meta:
         db_table = 'car_photos'
 
-    photo = models.ImageField(upload_to=upload_car_photos, blank=True)
+    photo = models.ImageField(upload_to=CarsService.upload_car_photos, blank=True)
     car = models.ForeignKey(CarsModel, on_delete=models.CASCADE, related_name='photos')
