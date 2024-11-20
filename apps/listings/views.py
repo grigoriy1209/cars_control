@@ -1,24 +1,14 @@
 from rest_framework import status
-from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import (
-    CreateAPIView,
-    GenericAPIView,
-    ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView,
-    UpdateAPIView,
-)
+from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from better_profanity import profanity
 
 from core.pagination import PagePagination
 
 from apps.listings.filters import CarFilter
 from apps.listings.models import CarsModel
 from apps.listings.serializers import CarPhotoSerializer, CarSerializer
-from apps.listings.services import CarsService
 
 
 class CarListCreateView(ListCreateAPIView):

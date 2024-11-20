@@ -29,7 +29,7 @@ class CarSerializer(serializers.ModelSerializer):
 
         user = self.context['request'].user
         if user.account.account_type == 'Basic' and user.cars.count() >= 1:
-            raise serializers.ValidationError({"detail": {"basic account can add only 1 car"}})
+            raise ValidationError({"detail": {"basic account can add only 1 car"}})
         return data
 
     def create(self, validated_data):
