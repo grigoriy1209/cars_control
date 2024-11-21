@@ -39,7 +39,6 @@ class CarsModel(BaseModel):
     status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
-    edit_count = models.PositiveIntegerField(default=0)
     edit_attempts = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')

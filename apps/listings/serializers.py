@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from apps.listings.models import CarPhotoModel, CarsModel
+from apps.listings.services import CarsService
 
 
 class CarPhotoSerializer(serializers.ModelSerializer):
@@ -22,19 +22,16 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
-                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', "user", "edit_count", "edit_attempts")
-        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_count", "edit_attempts")
+                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', "user", "edit_attempts")
+
+        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user","edit_attempts")
 
     def validate(self, data):
-
         user = self.context['request'].user
-        if user.account.account_type == 'Basic' and user.cars.count() >= 1:
-            raise ValidationError({"detail": {"basic account can add only 1 car"}})
-        return data
+        car_service = CarsService()
+        return car_service.validate_car_details(user, data)
 
     def create(self, validated_data):
-        instance = self.instance
         validated_data['user'] = self.context['request'].user
-        print(validated_data.get("user"))
-        car= CarsModel.objects.create(**validated_data)
+        car = CarsModel.objects.create(**validated_data)
         return car

@@ -9,4 +9,3 @@
 #     def register(cls, user:User):
 #         token = JWTService.create_token(user,ActivateToken)
 #         url = f'http://localhost:3000/activate/{token}'
-#
