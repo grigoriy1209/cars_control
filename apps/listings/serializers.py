@@ -23,26 +23,36 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
-                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user", "edit_attempts")
+                  'checkpoint', 'color', 'is_active', 'created_at', 'updated_at', 'description', "user", "edit_attempts")
 
-        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts")
+        read_only_fields = ('created_at', 'updated_at', 'id', 'is_active', "user", "edit_attempts")
 
     def validate(self, data):
         print(data)
         user = self.context['request'].user
-        car_service = CarsService()
+        add_cars = self.instance if self.instance else CarsModel(**data)
 
+        car_service = CarsService()
         car_service.account_limit(user, data)
 
         description = data.get('description', '')
-        data['description'] = car_service.validate_foul(description)
+        CarsService.validate_foul(description)
 
-        edit_attempts = data.get('edit_attempts', 0)
-        data['edit_attempts'] = car_service.count_attempts(edit_attempts)
-
+        # if add_cars.edit_attempts >= 3:
+        #     add_cars.is_active = False
+        #     add_cars.save()
+        #     add_cars.notify_manager()
+        #     print(add_cars.notify_manager)
+        #     raise ValidationError('fgfggff')
+        # add_cars.is_active = True
+        # add_cars.save()
         return data
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
         car = CarsModel.objects.create(**validated_data)
         return car
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        return instance

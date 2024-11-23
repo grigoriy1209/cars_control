@@ -1,10 +1,7 @@
-import re
 from datetime import datetime
 
 from django.core import validators as V
 from django.db import models
-
-from better_profanity import profanity
 
 from core.models import BaseModel
 
@@ -14,7 +11,6 @@ from .choices.body_type_choice import BodyTypeChoice
 from .choices.currency_choice import CurrencyChoice
 from .choices.eco_choice import EcologicalStandardTypeChoice
 from .choices.engine_choice import EngineTypeChoice
-from .choices.status_choice import StatusChoice
 from .choices.transmission_choice import CheckpointTypeChoice
 from .managers import CarManager
 from .regex import CarRegex
@@ -37,7 +33,8 @@ class CarsModel(BaseModel):
     eco_standard = models.CharField(max_length=25, choices=EcologicalStandardTypeChoice.choices)
     checkpoint = models.CharField(max_length=25, choices=CheckpointTypeChoice.choices)
     color = models.CharField(max_length=23, validators=[V.MinLengthValidator(2)])
-    status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
+    is_active = models.BooleanField(default=True)
+    # status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
     description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)],null=False)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
@@ -47,6 +44,8 @@ class CarsModel(BaseModel):
 
     objects = CarManager()
 
+    def validate_foul(self):
+        return CarsService.validate_foul(self.description)
 
 
 class CarPhotoModel(BaseModel):
