@@ -1,35 +1,37 @@
 import os
+import re
 import uuid
 
 from rest_framework.exceptions import ValidationError
 
-from better_profanity import profanity
-
 
 class CarsService:
-
     @staticmethod
     def upload_car_photos(instance, file: str) -> str:
         ext = file.split('.')[-1]
         return os.path.join(str(instance.car.user.id), 'car_photo', f'{uuid.uuid1()}.{ext}')
 
-    def validate_car_details(self, user, data):
+    @staticmethod
+    def account_limit(user, data):
         if user.account.account_type == 'Basic' and user.cars.count() >= 1:
             raise ValidationError({"detail": {"basic account can add only 1 car"}})
 
-        for field in ['brand', 'model', 'color', 'region']:
-            if profanity.contains_profanity(data.get(field, '')):
-                from apps.listings.models import CarsModel
-                car_instance = CarsModel.objects.filter(user=user, brand=data.get('brand', )).first()
+    @staticmethod
+    def validate_foul(description):
+        foul_words = ['fuck', 'Fucking']
+        for word in foul_words:
+            if word.lower() in description.lower():
+                raise ValidationError({"detail": {"foul words can not"}})
+        return description
 
-                if car_instance is None:
-                    car_instance = CarsModel(**data)
+    @staticmethod
+    def count_attempts(car):
+        max_attempts = 3
+        if car.edit_attempts >= max_attempts:
+            # car.status = 'inactive'
+            # car.save()
+            raise ValidationError({"detail": {"attempts exceeds max attempts"}})
+        # else:
+        car.edit_attempts += 1
+        car.save()
 
-                car_instance.edit_attempts += 1
-                car_instance.save()
-
-                if car_instance.edit_attempts >= 3:
-                    raise ValidationError({"detail": {"Maximum car edit attempts reached"}})
-
-                raise ValidationError({"detail": {"Profanity detected in car details"}})
-        return data

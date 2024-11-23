@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from apps.listings.models import CarPhotoModel, CarsModel
 from apps.listings.services import CarsService
@@ -22,14 +23,24 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
-                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', "user", "edit_attempts")
+                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user", "edit_attempts")
 
-        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user","edit_attempts")
+        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts")
 
     def validate(self, data):
+        print(data)
         user = self.context['request'].user
         car_service = CarsService()
-        return car_service.validate_car_details(user, data)
+
+        car_service.account_limit(user, data)
+
+        description = data.get('description', '')
+        data['description'] = car_service.validate_foul(description)
+
+        edit_attempts = data.get('edit_attempts', 0)
+        data['edit_attempts'] = car_service.count_attempts(edit_attempts)
+
+        return data
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user

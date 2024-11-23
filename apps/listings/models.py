@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from django.core import validators as V
@@ -38,12 +39,14 @@ class CarsModel(BaseModel):
     color = models.CharField(max_length=23, validators=[V.MinLengthValidator(2)])
     status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
+    description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)],null=False)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
     objects = CarManager()
+
 
 
 class CarPhotoModel(BaseModel):
