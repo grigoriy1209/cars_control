@@ -14,15 +14,14 @@ class UserProfile:
 
 @dataclass()
 class User:
-
     id: int
     email: str
     password: str
     is_active: bool
     is_superuser: bool
     is_staff: bool
-    role_type:str
-    account_type:str
+    role_type: str
+    account: str
     created_at: datetime
     updated_at: datetime
     last_login: datetime

@@ -3,6 +3,8 @@ from django.db import transaction
 
 from rest_framework import serializers
 
+from core.services.email_service import EmailService
+
 from apps.all_users.accounts.choices import AccountType
 from apps.all_users.accounts.models import AccountModels
 from apps.all_users.accounts.serializers import AccountSerializer
@@ -66,6 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         user = UserModel.objects.create_user(**validated_data)
         profile = ProfileModel.objects.create(**profile, user=user, )
+        EmailService.register(user)
         account, created = AccountModels.objects.get_or_create(user=user, defaults={"account_type": AccountType.BASIC})
         user.account = account
         user.save()

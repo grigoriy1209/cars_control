@@ -36,7 +36,7 @@ class CarsModel(BaseModel):
     is_active = models.BooleanField(default=True)
     # status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
-    description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)],null=False)
+    description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
 
@@ -46,6 +46,10 @@ class CarsModel(BaseModel):
 
     def validate_foul(self):
         return CarsService.validate_foul(self.description)
+
+    def counter_edit_attempts(self):
+        self.edit_attempts += 1
+        self.save()
 
 
 class CarPhotoModel(BaseModel):

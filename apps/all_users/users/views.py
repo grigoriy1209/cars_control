@@ -23,7 +23,7 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
 
-    permission_classes = [IsSuperUser, IsAuthenticated]
+    permission_classes = [AllowAny,]
 
 
 class MeInfoView(GenericAPIView):

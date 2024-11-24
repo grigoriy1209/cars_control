@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from core.services.email_service import EmailService
+
 from apps.listings.models import CarPhotoModel, CarsModel
 from apps.listings.services import CarsService
 
@@ -23,14 +25,15 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
-                  'checkpoint', 'color', 'is_active', 'created_at', 'updated_at', 'description', "user", "edit_attempts")
+                  'checkpoint', 'color', 'is_active', 'created_at', 'updated_at', 'description', "user",
+                  "edit_attempts")
 
         read_only_fields = ('created_at', 'updated_at', 'id', 'is_active', "user", "edit_attempts")
 
     def validate(self, data):
         print(data)
         user = self.context['request'].user
-        add_cars = self.instance if self.instance else CarsModel(**data)
+        car = self.instance
 
         car_service = CarsService()
         car_service.account_limit(user, data)
@@ -38,14 +41,11 @@ class CarSerializer(serializers.ModelSerializer):
         description = data.get('description', '')
         CarsService.validate_foul(description)
 
-        # if add_cars.edit_attempts >= 3:
-        #     add_cars.is_active = False
-        #     add_cars.save()
-        #     add_cars.notify_manager()
-        #     print(add_cars.notify_manager)
-        #     raise ValidationError('fgfggff')
-        # add_cars.is_active = True
-        # add_cars.save()
+        if car and car.edit_attempts >= 3:
+            EmailService.notify_manager(user)
+            car.is_active = False
+            car.save()
+            raise ValidationError("This car is already active.")
         return data
 
     def create(self, validated_data):

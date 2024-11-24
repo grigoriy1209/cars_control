@@ -1,16 +1,18 @@
 from typing import Type
 
-from django.contrib.auth import get_user_model
-
 from rest_framework.generics import get_object_or_404
 
 from rest_framework_simplejwt.tokens import BlacklistMixin, Token
 
-from core.dataclasses.user_dataclass import User
 from core.enums.action_token_enum import ActionTokenEnum
-from core.exceptions.jwt_exeption import JWTException
+from core.exceptions.jwt_exeption import JwtException
 
 ActionTokenClassType = Type[BlacklistMixin | Token]
+
+from django.contrib.auth import get_user_model
+
+from core.dataclasses.user_dataclass import User
+
 UserModel: User = get_user_model()
 
 
@@ -36,10 +38,11 @@ class JWTService:
     @staticmethod
     def verify_token(token, token_class: ActionTokenClassType):
         try:
-            token_result = token_class(token)
-            token_result.check_blacklist()
+            token_res = token_class(token)
+            token_res.check_blacklist()
         except Exception:
-            raise JWTException
-        token_result.blacklist()
-        user_id = token_result.payload.get('user_id')
+            raise JwtException
+
+        token_res.blacklist()
+        user_id = token_res.payload.get('user_id')
         return get_object_or_404(UserModel, pk=user_id)

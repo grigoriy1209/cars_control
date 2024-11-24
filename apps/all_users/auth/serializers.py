@@ -7,7 +7,7 @@ from core.dataclasses.user_dataclass import User
 UserModel: User = get_user_model()
 
 
-class EmailSerializer(serializers.ModelSerializer):
+class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
