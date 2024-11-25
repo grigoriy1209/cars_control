@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ListingsConfig(AppConfig):
+class AnalyticsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.listings'
+    name = 'apps.analytics'

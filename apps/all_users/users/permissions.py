@@ -1,5 +1,7 @@
 from rest_framework.permissions import BasePermission
 
+from apps.all_users.users.choices import UserRoleType
+
 
 class IsManagerOrAdmin(BasePermission):
     def has_permission(self, request, view):
@@ -10,3 +12,11 @@ class IsManagerOrAdmin(BasePermission):
             request.user and
             request.user.is_staff
             and request.user.role_type in ['Manager', 'Admin'])
+
+
+class IsPremiumSeller(BasePermission):
+    def has_permission(self, request, view):
+        return bool(
+            request.user and
+            request.user.role_type == UserRoleType.PREMIUM_SELLER
+        )

@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from core.services.email_service import EmailService
 
-from apps.listings.models import CarPhotoModel, CarsModel
-from apps.listings.services import CarsService
+from apps.all_cars.listings.choices.status_choice import StatusChoice
+from apps.all_cars.listings.models import CarPhotoModel, CarsModel
+from apps.all_cars.listings.services import CarsService
 
 
 class CarPhotoSerializer(serializers.ModelSerializer):
@@ -26,9 +26,11 @@ class CarSerializer(serializers.ModelSerializer):
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
                   'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user",
-                  "edit_attempts")
+                  "edit_attempts", )
 
-        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts")
+        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts", )
+
+        extra_kwargs = {'views': {'write_only': True}}
 
     def validate_description(self, value):
         return CarsService.validate_foul(value)
@@ -40,12 +42,9 @@ class CarSerializer(serializers.ModelSerializer):
 
         if car and car.edit_attempts >= 3:
             EmailService.notify_manager(user)
-            if car.update_status == 'inactive':
-                raise serializers.ValidationError('bkb;bb')
-
-        car_service = CarsService()
-        car_service.account_limit(user, data)
-
+            if car.update_status == StatusChoice.INACTIVE:
+                raise serializers.ValidationError({'detail': 'you have exceeded the number of edit attempts'})
+        CarsService.account_limit(user, data)
         return data
 
     def create(self, validated_data):
@@ -55,6 +54,7 @@ class CarSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.counter_edit_attempts()
-        instance = super().update(instance, validated_data)
-        instance.update_status()
-        return instance
+        instance.update_status(validated_data.get('description', instance.description))
+        return super().update(instance, validated_data)
+
+

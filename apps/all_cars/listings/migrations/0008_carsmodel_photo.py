@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 
-import apps.listings.services
+import apps.all_cars.listings.services
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='carsmodel',
             name='photo',
-            field=models.ImageField(blank=True, upload_to=apps.listings.services.CarsService.upload_car_photos),
+            field=models.ImageField(blank=True, upload_to=apps.all_cars.listings.services.CarsService.upload_car_photos),
         ),
     ]

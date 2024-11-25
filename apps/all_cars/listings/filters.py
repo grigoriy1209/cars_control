@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
-from apps.listings.choices.status_choice import StatusChoice
-from apps.listings.models import CarsModel
+from apps.all_cars.listings.choices.status_choice import StatusChoice
+from apps.all_cars.listings.models import CarsModel
 
 
 class CarFilter(filters.FilterSet):

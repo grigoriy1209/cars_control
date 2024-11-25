@@ -1,40 +1,34 @@
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import (
-    CreateAPIView,
-    GenericAPIView,
-    ListAPIView,
-    ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView,
-    get_object_or_404,
-)
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from core.pagination import PagePagination
-from core.services.email_service import EmailService
 
-from apps.all_users.auth.serializers import EmailSerializer
-from apps.all_users.auth.views import UserModel
-from apps.listings.filters import CarFilter
-from apps.listings.models import CarsModel
-from apps.listings.serializers import CarPhotoSerializer, CarSerializer
-from apps.listings.services import CarsService
+from apps.all_cars.listings.filters import CarFilter
+from apps.all_cars.listings.models import CarsModel
+from apps.all_cars.listings.serializers import CarPhotoSerializer, CarSerializer
+from apps.all_cars.listings.services import CarsService
 
 
-class CarListCreateView(GenericAPIView):
+class CarListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
     pagination_class = PagePagination
     filter_classes = (CarFilter,)
     queryset = CarsModel.objects.all()
 
+    def perform_create(self, serializer):
+        car = serializer.save(user=self.request.user)
+        description = serializer.validated_data.get('description')
+        car.update_status(description)
+
     def post(self, *args, **kwargs):
         data = self.request.data
         serializer = self.serializer_class(data=data,context={'request': self.request})
         serializer.is_valid(raise_exception=True)
-        car = serializer.save(user=self.request.user)
-        user = get_object_or_404(UserModel, pk=self.request.user.id)
+        self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -43,10 +37,12 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = CarSerializer
     queryset = CarsModel.objects.all()
 
-    def put(self, request, *args, **kwargs):
-        instance = self.get_object()
+    def perform_update(self, serializer):
+        CarsService.counter_edit_attempts(serializer.instance)
+        serializer.instance.update_status(serializer.validated_data.get('description'))
+        serializer.save( )
 
-        CarsService.counter_edit_attempts(instance)
+    def put(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
 
 

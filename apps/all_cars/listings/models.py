@@ -9,6 +9,7 @@ from core.models import BaseModel
 
 from apps.all_users.users.models import UserModel
 
+from ...all_users.accounts.choices import AccountType
 from .choices.body_type_choice import BodyTypeChoice
 from .choices.currency_choice import CurrencyChoice
 from .choices.eco_choice import EcologicalStandardTypeChoice
@@ -41,21 +42,23 @@ class CarsModel(BaseModel):
     description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False, blank=True)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
     objects = CarManager()
 
-    def counter_edit_attempts(self):
-        self.edit_attempts += 1
+    def count_views(self):
+        self.views += 1
         self.save()
 
-    def update_status(self):
-        if self.edit_attempts >= 3:
-            self.status = 'inactive'
-            self.save()
-            return False
-        return True
+    def update_status(self, description):
+        try:
+            CarsService.validate_foul(description)
+            self.status = StatusChoice.ACTIVE
+        except ValidationError:
+            self.status = StatusChoice.INACTIVE
+        self.save()
 
 
 class CarPhotoModel(BaseModel):

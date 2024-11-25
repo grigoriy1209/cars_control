@@ -1,5 +1,4 @@
 import os
-import re
 import uuid
 
 from rest_framework.exceptions import ValidationError
@@ -21,7 +20,7 @@ class CarsService:
         foul_words = ['fuck', 'Fucking']
         for word in foul_words:
             if word.lower() in description.lower():
-                raise ValidationError({"detail": {"foul words can not"}})
+                raise ValidationError({"detail": {"inappropriate words found "}})
         return description
 
     @staticmethod
@@ -32,5 +31,10 @@ class CarsService:
             raise ValidationError({"detail": {"car edit attempts exceeded"}})
         car.edit_attempts += 1
         car.save()
+
+
+
+
+
 
 

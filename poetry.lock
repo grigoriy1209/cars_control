@@ -15,17 +15,6 @@ files = [
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
-name = "better-profanity"
-version = "0.7.0"
-description = "Blazingly fast cleaning swear words (and their leetspeak) in strings"
-optional = false
-python-versions = "==3.*"
-files = [
-    {file = "better_profanity-0.7.0-py3-none-any.whl", hash = "sha256:bd4c529ea6aa2db1aaa50524be1ed14d0fe5c664f1fd88c8bc388c7e9f9f00e8"},
-    {file = "better_profanity-0.7.0.tar.gz", hash = "sha256:8a6fdc8606d7471e7b5f6801917eca98ec211098262e82f62da4f5de3a73145b"},
-]
-
-[[package]]
 name = "django"
 version = "5.1.3"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -277,4 +266,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "5d1b2417d8416ff3429137b467a4ba15f650dc809968cc62582a63e62d71204f"
+content-hash = "906292c570d63a00dc6e913f8d8e2e33bd69319b90f110b8aaae2dec5fcb7f1c"
