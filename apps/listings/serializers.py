@@ -25,27 +25,27 @@ class CarSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
-                  'checkpoint', 'color', 'is_active', 'created_at', 'updated_at', 'description', "user",
+                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user",
                   "edit_attempts")
 
-        read_only_fields = ('created_at', 'updated_at', 'id', 'is_active', "user", "edit_attempts")
+        read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts")
+
+    def validate_description(self, value):
+        return CarsService.validate_foul(value)
 
     def validate(self, data):
         print(data)
         user = self.context['request'].user
         car = self.instance
 
+        if car and car.edit_attempts >= 3:
+            EmailService.notify_manager(user)
+            if car.update_status == 'inactive':
+                raise serializers.ValidationError('bkb;bb')
+
         car_service = CarsService()
         car_service.account_limit(user, data)
 
-        description = data.get('description', '')
-        CarsService.validate_foul(description)
-
-        if car and car.edit_attempts >= 3:
-            EmailService.notify_manager(user)
-            car.is_active = False
-            car.save()
-            raise ValidationError("This car is already active.")
         return data
 
     def create(self, validated_data):
@@ -54,5 +54,7 @@ class CarSerializer(serializers.ModelSerializer):
         return car
 
     def update(self, instance, validated_data):
+        instance.counter_edit_attempts()
         instance = super().update(instance, validated_data)
+        instance.update_status()
         return instance

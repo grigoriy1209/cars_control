@@ -24,6 +24,13 @@ class CarsService:
                 raise ValidationError({"detail": {"foul words can not"}})
         return description
 
-    def notify_manager(self):
-        subject = 'Оголошення неактивне'
-        message = f'Оголошення "{self}" перевищило максимальну кількість спроб редагування і стало неактивним.'
+    @staticmethod
+    def counter_edit_attempts(car):
+        if car.edit_attempts >= 3:
+            car.status = 'inactive'
+            car.save()
+            raise ValidationError({"detail": {"car edit attempts exceeded"}})
+        car.edit_attempts += 1
+        car.save()
+
+

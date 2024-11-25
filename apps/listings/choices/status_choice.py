@@ -5,4 +5,6 @@ class StatusChoice(models.TextChoices):
     ACTIVE = 'active',
     INACTIVE = 'inactive',
     PENDING = 'pending',
+    REJECTED = 'rejected',
+
 

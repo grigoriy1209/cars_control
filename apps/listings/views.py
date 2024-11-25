@@ -19,6 +19,7 @@ from apps.all_users.auth.views import UserModel
 from apps.listings.filters import CarFilter
 from apps.listings.models import CarsModel
 from apps.listings.serializers import CarPhotoSerializer, CarSerializer
+from apps.listings.services import CarsService
 
 
 class CarListCreateView(GenericAPIView):
@@ -44,11 +45,8 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance.edit_attempts += 1
-        instance.save()
-        if instance.edit_attempts > 3:
-            CarsModel.objects.filter(id=instance.id).update(status='inactive')
-            raise ValidationError({"detail": "You have reached the maximum number of edit attempts"})
+
+        CarsService.counter_edit_attempts(instance)
         return super().update(request, *args, **kwargs)
 
 
@@ -71,8 +69,11 @@ class CarAddPhotosView(CreateAPIView):
     def put(self, *args, **kwargs):
         files = self.request.FILES
         car = self.get_object()
+        if car.photos.count() >=10:
+            raise ValidationError('blblbl ')
+
         for index in files:
-            serializer = CarPhotoSerializer(data={'photo':files[index]})
+            serializer = CarPhotoSerializer(data={'photo': files[index]})
             serializer.is_valid(raise_exception=True)
             serializer.save(car=car)
         car_serializer = CarSerializer(car)
