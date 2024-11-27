@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -26,7 +26,7 @@ class CarListCreateView(ListCreateAPIView):
 
     def post(self, *args, **kwargs):
         data = self.request.data
-        serializer = self.serializer_class(data=data,context={'request': self.request})
+        serializer = self.serializer_class(data=data, context={'request': self.request})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -37,10 +37,16 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = CarSerializer
     queryset = CarsModel.objects.all()
 
+    def get(self, *args, **kwargs):
+        car = get_object_or_404(CarsModel, pk=self.kwargs['pk'])
+        CarsService.increment_view(car)
+        serializer = self.get_serializer(car)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def perform_update(self, serializer):
         CarsService.counter_edit_attempts(serializer.instance)
         serializer.instance.update_status(serializer.validated_data.get('description'))
-        serializer.save( )
+        serializer.save()
 
     def put(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -59,14 +65,14 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 class CarAddPhotosView(CreateAPIView):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
     queryset = CarsModel.objects.all()
 
     def put(self, *args, **kwargs):
         files = self.request.FILES
         car = self.get_object()
-        if car.photos.count() >=10:
-            raise ValidationError('blblbl ')
+        if car.photos.count() >= 10:
+            raise ValidationError('Limit photo 10')
 
         for index in files:
             serializer = CarPhotoSerializer(data={'photo': files[index]})
@@ -74,4 +80,3 @@ class CarAddPhotosView(CreateAPIView):
             serializer.save(car=car)
         car_serializer = CarSerializer(car)
         return Response(car_serializer.data, status=status.HTTP_201_CREATED)
-

@@ -32,9 +32,9 @@ class CarsService:
         car.edit_attempts += 1
         car.save()
 
+    @staticmethod
+    def increment_view(car):
+        from apps.all_cars.listings.models import CarsModel
 
-
-
-
-
-
+        CarsModel.objects.filter(pk=car.pk).update(views=car.views + 1)
+        car.refresh_from_db()
