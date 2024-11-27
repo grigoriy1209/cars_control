@@ -9,7 +9,7 @@ from core.models import BaseModel
 
 from apps.all_users.users.models import UserModel
 
-from ...all_users.accounts.choices import AccountType
+from ..dropout_cars.models import BrandsModel, ModelCar
 from .choices.body_type_choice import BodyTypeChoice
 from .choices.currency_choice import CurrencyChoice
 from .choices.eco_choice import EcologicalStandardTypeChoice
@@ -26,8 +26,10 @@ class CarsModel(BaseModel):
         db_table = 'cars'
         ordering = ('id',)
 
-    brand = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.BRAND.value)])
-    model = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.MODEL.value)])
+    # brand = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.BRAND.value)])
+    # model = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.MODEL.value)])
+    brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='cars')
+    model = models.ForeignKey(ModelCar, on_delete=models.CASCADE, related_name='cars')
     year = models.IntegerField(validators=[V.MinValueValidator(1950), V.MaxValueValidator(datetime.now().year)])
     price = models.IntegerField(validators=[V.MinValueValidator(0), V.MaxValueValidator(1_000_000)])
     mileage = models.IntegerField(validators=[V.MinValueValidator(10), V.MaxValueValidator(1_000_000)])

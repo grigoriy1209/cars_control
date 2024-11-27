@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from core.services.email_service import EmailService
 
+from apps.all_cars.dropout_cars.models import BrandsModel
 from apps.all_cars.listings.choices.status_choice import StatusChoice
 from apps.all_cars.listings.models import CarPhotoModel, CarsModel
 from apps.all_cars.listings.services import CarsService
@@ -18,6 +19,8 @@ class CarSerializer(serializers.ModelSerializer):
     photos = CarPhotoSerializer(many=True, read_only=True)
     # user = UserSerializer(read_only=False,write_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
+    brand = serializers.PrimaryKeyRelatedField(read_only=True)
+    model = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = CarsModel

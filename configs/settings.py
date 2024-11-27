@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.all_users.auth',
     'apps.all_cars.listings',
     'apps.analytics',
+    'apps.all_cars.dropout_cars',
 ]
 
 MIDDLEWARE = [

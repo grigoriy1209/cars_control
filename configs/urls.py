@@ -18,6 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
+from apps.all_cars.dropout_cars.urls import router
+
 urlpatterns = [
     path('api/all_users/users', include('apps.all_users.users.urls')),
     path('api/all_users/admins', include('apps.all_users.admins.urls')),
@@ -25,6 +27,7 @@ urlpatterns = [
     path('api/all_users/accounts', include('apps.all_users.accounts.urls')),
     path('api/all_cars/listings', include('apps.all_cars.listings.urls')),
     path('api/analytics', include('apps.analytics.urls')),
+    path('api/all_cars/dropout_cars/', include('apps.all_cars.dropout_cars.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

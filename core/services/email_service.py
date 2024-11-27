@@ -1,13 +1,11 @@
 import os
 
 from django.contrib.auth import get_user_model
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 
 from core.dataclasses.user_dataclass import User
 from core.services.jwt_service import ActivateToken, JWTService, RecoverToken
-
-from configs import settings
 
 UserModel: User = get_user_model()
 
@@ -61,3 +59,13 @@ class EmailService:
             },
             'checking_ad.html',
         )
+
+    @classmethod
+    def notify_admin_error_brand(cls, user: User):
+        cls.__send_email(
+            user.email,
+            'error brand',
+            {'name': user.profile.name},
+            'brand_not.html',
+        )
+
