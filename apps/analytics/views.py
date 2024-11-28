@@ -1,3 +1,4 @@
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -19,7 +20,8 @@ class ViewsCountApiView(APIView):
 class ViewsByDaysApiView(APIView):
     permission_classes = (IsPremiumSeller,)
 
-    def get(self, request, *args, **kwargs):
+
+def get(self, request, *args, **kwargs):
         user = request.user
         days = int(kwargs.get('days', ))
         views = CarsModel.objects.views_count_days(days=days, user=user)
