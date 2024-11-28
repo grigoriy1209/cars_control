@@ -3,6 +3,8 @@ import uuid
 
 from rest_framework.exceptions import ValidationError
 
+from apps.all_cars.listings.choices.status_choice import StatusChoice
+
 
 class CarsService:
     @staticmethod
@@ -20,17 +22,24 @@ class CarsService:
         foul_words = ['fuck', 'Fucking']
         for word in foul_words:
             if word.lower() in description.lower():
-                raise ValidationError({"detail": {"inappropriate words found "}})
+                raise ValidationError(
+                    {"detail": {"The mask is saved, but you need to edit it, otherwise the manager will delete it"}})
         return description
 
     @staticmethod
     def counter_edit_attempts(car):
-        if car.edit_attempts >= 3:
-            car.status = 'inactive'
-            raise ValidationError({"detail": {"car edit attempts exceeded"}})
-        car.edit_attempts += 1
+        if CarsService.validate_foul(car.description):
+            if car.edit_attempts >= 3:
+                car.status = StatusChoice.INACTIVE
+        else:
+            car.status = StatusChoice.ACTIVE
+
         car.save()
-        print({"edit":car.edit_attempts})
+
+    # @staticmethod
+    # def edit_car(car, new_description: str):
+    #     car.description = new_description
+    #     CarsService.counter_edit_attempts(car)
 
     @staticmethod
     def increment_view(car):
@@ -38,3 +47,7 @@ class CarsService:
 
         CarsModel.objects.filter(pk=car.pk).update(views=car.views + 1)
         car.refresh_from_db()
+
+    @classmethod
+    def validate_words(cls, self):
+        pass

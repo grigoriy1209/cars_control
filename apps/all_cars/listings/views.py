@@ -50,7 +50,8 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         car = serializer.instance
         CarsService.counter_edit_attempts(car)
-        car.update_status(serializer.validated_data.get('description'))
+        description = serializer.validated_data.get('description')
+        car.update_status(description)
         serializer.save()
 
 # class CarAddPhotoView(UpdateAPIView):

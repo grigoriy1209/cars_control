@@ -36,12 +36,10 @@ class CarSerializer(serializers.ModelSerializer):
         extra_kwargs = {'views': {'write_only': True},
                         }
 
-    def validate_description(self, value):
-        return CarsService.validate_foul(value)
-
     def validate(self, data):
         print(data)
         user = self.context['request'].user
+        # description = data.get('description','')
         car = self.instance
 
         if car and car.edit_attempts >= 3:
@@ -49,19 +47,23 @@ class CarSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({'detail': 'you have exceeded the number of edit attempts'})
             EmailService.notify_manager(user)
         CarsService.account_limit(user, data)
+        CarsService.validate_foul(data.get('description',''))
         return data
 
     def create(self, validated_data):
         print(validated_data)
-        validated_data['user'] = self.context['request'].user
+        user = self.context['request'].user
         brand = validated_data.pop('brand', None)
         if brand is None:
             raise serializers.ValidationError({'detail': 'brand is required'})
         car = CarsModel.objects.create(brand=brand, **validated_data)
+        CarsService.counter_edit_attempts(car,)
         return car
 
     def update(self, instance, validated_data):
+        description = validated_data.get('description', instance.description)
+        instance.description = description
         CarsService.counter_edit_attempts(instance)
-        instance.update_status(validated_data.get('description', instance.description))
+        instance.update_status(description,)
         instance.save()
         return super().update(instance, validated_data)

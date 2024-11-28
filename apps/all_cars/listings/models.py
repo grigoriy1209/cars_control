@@ -6,6 +6,7 @@ from django.db import models
 from rest_framework.exceptions import ValidationError
 
 from core.models import BaseModel
+from core.services.email_service import EmailService
 
 from apps.all_users.users.models import UserModel
 
@@ -39,28 +40,31 @@ class CarsModel(BaseModel):
     eco_standard = models.CharField(max_length=25, choices=EcologicalStandardTypeChoice.choices)
     checkpoint = models.CharField(max_length=25, choices=CheckpointTypeChoice.choices)
     color = models.CharField(max_length=23, validators=[V.MinLengthValidator(2)])
-    status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.ACTIVE)
+    status = models.CharField(max_length=20, choices=StatusChoice.choices,)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
     description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False, blank=False)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
+
     views = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='cars')
 
     objects = CarManager()
 
+    def update_status(self, description):
+        if self.edit_attempts >= 3:
+            self.status = StatusChoice.INACTIVE
+        elif CarsService.validate_foul(description):
+
+            self.status = StatusChoice.INACTIVE
+        else:
+            self.status = StatusChoice.ACTIVE
+        self.save()
+
     def count_views(self):
         self.views += 1
         self.save()
-
-    def update_status(self, description):
-        try:
-            CarsService.validate_foul(description)
-            self.status = StatusChoice.ACTIVE
-        except ValidationError:
-            self.status = StatusChoice.INACTIVE
-        self.save(update_fields=["status"])
 
 
 class CarPhotoModel(BaseModel):

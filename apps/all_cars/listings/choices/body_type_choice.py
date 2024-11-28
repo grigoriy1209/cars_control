@@ -13,5 +13,5 @@ class BodyTypeChoice(models.TextChoices):
     MINIVAN = 'minivan',
     VAN = 'van',
     ROADSTER = 'roadster',
-    LUXURY_CAR = 'luxury car',
-    SPORT_CAR = 'sport car',
+    LUXURY_CAR = 'luxury_car',
+    SPORT_CAR = 'sport_car',
