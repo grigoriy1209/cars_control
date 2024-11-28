@@ -21,3 +21,6 @@ class ModelCar(BaseModel):
 
     model_car = models.CharField(max_length=25, )
     brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='car_models')
+
+    def __str__(self):
+        return self.model_car

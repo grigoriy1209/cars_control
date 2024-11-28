@@ -22,7 +22,11 @@ class CarListCreateView(ListCreateAPIView):
     def perform_create(self, serializer):
         car = serializer.save(user=self.request.user)
         description = serializer.validated_data.get('description')
+        brand = serializer.validated_data.get('brand')
+        if not brand:
+            raise ValidationError('Brand is required')
         car.update_status(description)
+        serializer.save(brand_id=brand, user=self.request.user)
 
     def post(self, *args, **kwargs):
         data = self.request.data

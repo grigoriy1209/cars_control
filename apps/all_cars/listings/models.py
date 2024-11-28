@@ -28,7 +28,7 @@ class CarsModel(BaseModel):
 
     # brand = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.BRAND.value)])
     # model = models.CharField(max_length=15, validators=[V.RegexValidator(*CarRegex.MODEL.value)])
-    brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='cars')
+    brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='cars', null=False, blank=False)
     model = models.ForeignKey(ModelCar, on_delete=models.CASCADE, related_name='cars')
     year = models.IntegerField(validators=[V.MinValueValidator(1950), V.MaxValueValidator(datetime.now().year)])
     price = models.IntegerField(validators=[V.MinValueValidator(0), V.MaxValueValidator(1_000_000)])
@@ -50,8 +50,8 @@ class CarsModel(BaseModel):
 
     objects = CarManager()
 
-    def count_views(self):
-        self.views += 1
+    def counter_edit_attempts(self):
+        self.edit_attempts += 0
         self.save()
 
     def update_status(self, description):
