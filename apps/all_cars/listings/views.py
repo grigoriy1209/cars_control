@@ -20,7 +20,7 @@ class CarListCreateView(ListCreateAPIView):
     queryset = CarsModel.objects.all()
 
     def perform_create(self, serializer):
-        car = serializer.save(user=self.request.user)
+        car = serializer.save(user=self.request.user,)
         description = serializer.validated_data.get('description')
         brand = serializer.validated_data.get('brand')
         if not brand:
@@ -48,13 +48,10 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
-        CarsService.counter_edit_attempts(serializer.instance)
-        serializer.instance.update_status(serializer.validated_data.get('description'))
+        car = serializer.instance
+        CarsService.counter_edit_attempts(car)
+        car.update_status(serializer.validated_data.get('description'))
         serializer.save()
-
-    def put(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
-
 
 # class CarAddPhotoView(UpdateAPIView):
 #     permission_classes = (IsAuthenticated,)

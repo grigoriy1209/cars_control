@@ -27,10 +27,10 @@ class CarsService:
     def counter_edit_attempts(car):
         if car.edit_attempts >= 3:
             car.status = 'inactive'
-            car.save()
             raise ValidationError({"detail": {"car edit attempts exceeded"}})
         car.edit_attempts += 1
         car.save()
+        print({"edit":car.edit_attempts})
 
     @staticmethod
     def increment_view(car):

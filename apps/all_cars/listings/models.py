@@ -41,7 +41,7 @@ class CarsModel(BaseModel):
     color = models.CharField(max_length=23, validators=[V.MinLengthValidator(2)])
     status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.ACTIVE)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
-    description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False, blank=True)
+    description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False, blank=False)
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
     views = models.PositiveIntegerField(default=0)
@@ -50,8 +50,8 @@ class CarsModel(BaseModel):
 
     objects = CarManager()
 
-    def counter_edit_attempts(self):
-        self.edit_attempts += 0
+    def count_views(self):
+        self.views += 1
         self.save()
 
     def update_status(self, description):
@@ -60,7 +60,7 @@ class CarsModel(BaseModel):
             self.status = StatusChoice.ACTIVE
         except ValidationError:
             self.status = StatusChoice.INACTIVE
-        self.save()
+        self.save(update_fields=["status"])
 
 
 class CarPhotoModel(BaseModel):

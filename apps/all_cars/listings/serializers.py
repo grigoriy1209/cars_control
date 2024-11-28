@@ -20,14 +20,12 @@ class CarSerializer(serializers.ModelSerializer):
     # user = UserSerializer(read_only=False,write_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     brand = serializers.PrimaryKeyRelatedField(queryset=BrandsModel.objects.all(), )
-    # brand_name = serializers.StringRelatedField(source='brand')
     model = serializers.PrimaryKeyRelatedField(queryset=ModelCar.objects.all(), )
-    # model_name = serializers.StringRelatedField(source='model')
 
     class Meta:
         model = CarsModel
 
-        fields = ('id', 'brand', 'model',  'year',
+        fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'price', 'currency',
                   'body_type', 'engine', 'eco_standard', 'region', 'photos',
                   'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user",
@@ -35,7 +33,8 @@ class CarSerializer(serializers.ModelSerializer):
 
         read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts",)
 
-        extra_kwargs = {'views': {'write_only': True}}
+        extra_kwargs = {'views': {'write_only': True},
+                        }
 
     def validate_description(self, value):
         return CarsService.validate_foul(value)
@@ -46,22 +45,23 @@ class CarSerializer(serializers.ModelSerializer):
         car = self.instance
 
         if car and car.edit_attempts >= 3:
-            EmailService.notify_manager(user)
             if car.update_status == StatusChoice.INACTIVE:
                 raise serializers.ValidationError({'detail': 'you have exceeded the number of edit attempts'})
+            EmailService.notify_manager(user)
         CarsService.account_limit(user, data)
         return data
 
     def create(self, validated_data):
         print(validated_data)
         validated_data['user'] = self.context['request'].user
-        brand = validated_data.pop('brand',None)
+        brand = validated_data.pop('brand', None)
         if brand is None:
             raise serializers.ValidationError({'detail': 'brand is required'})
         car = CarsModel.objects.create(brand=brand, **validated_data)
         return car
 
     def update(self, instance, validated_data):
-        instance.counter_edit_attempts()
+        CarsService.counter_edit_attempts(instance)
         instance.update_status(validated_data.get('description', instance.description))
+        instance.save()
         return super().update(instance, validated_data)
