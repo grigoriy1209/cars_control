@@ -3,8 +3,6 @@ import uuid
 
 from rest_framework.exceptions import ValidationError
 
-from apps.all_cars.listings.choices.status_choice import StatusChoice
-
 
 class CarsService:
     @staticmethod
@@ -17,24 +15,23 @@ class CarsService:
         if user.account.account_type == 'Basic' and user.cars.count() >= 1:
             raise ValidationError({"detail": {"basic account can add only 1 car"}})
 
-    @staticmethod
-    def validate_foul(description):
-        foul_words = ['fuck', 'Fucking']
-        for word in foul_words:
-            if word.lower() in description.lower():
-                raise ValidationError(
-                    {"detail": {"The mask is saved, but you need to edit it, otherwise the manager will delete it"}})
-        return description
+    # @staticmethod
+    # def validate_foul(description):
+    #     foul_words = ['fuck', 'Fucking']
+    #     for word in foul_words:
+    #         if word.lower() in description.lower():
+    #             raise ValidationError(
+    #                 {"detail": {"The mask is saved, but you need to edit it, otherwise the manager will delete it"}})
+    #     return description
 
-    @staticmethod
-    def counter_edit_attempts(car):
-        if CarsService.validate_foul(car.description):
-            if car.edit_attempts >= 3:
-                car.status = StatusChoice.INACTIVE
-        else:
-            car.status = StatusChoice.ACTIVE
-
-        car.save()
+    # @staticmethod
+    # def counter_edit_attempts(car):
+    #     if car.validate_foul(car.description):
+    #         if car.edit_attempts >= 3:
+    #             car.status = StatusChoice.INACTIVE
+    #     else:
+    #         car.status = StatusChoice.ACTIVE
+    #     car.save()
 
     # @staticmethod
     # def edit_car(car, new_description: str):
@@ -43,11 +40,5 @@ class CarsService:
 
     @staticmethod
     def increment_view(car):
-        from apps.all_cars.listings.models import CarsModel
-
-        CarsModel.objects.filter(pk=car.pk).update(views=car.views + 1)
-        car.refresh_from_db()
-
-    @classmethod
-    def validate_words(cls, self):
-        pass
+        car.views += 1
+        car.save(update_fields=['views'])

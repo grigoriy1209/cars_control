@@ -12,6 +12,7 @@ mysqlclient = "^2.2.5"
 django-filter = "^24.3"
 djangorestframework-simplejwt = "^5.3.1"
 pillow = "^11.0.0"
+requests = "^2.32.3"
 
 
 

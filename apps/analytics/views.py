@@ -1,4 +1,3 @@
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -20,11 +19,15 @@ class ViewsCountApiView(APIView):
 class ViewsByDaysApiView(APIView):
     permission_classes = (IsPremiumSeller,)
 
-
-def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         user = request.user
-        days = int(kwargs.get('days', ))
-        views = CarsModel.objects.views_count_days(days=days, user=user)
+        days = int(kwargs.get('days', 10))
+        if days <= 0:
+            return Response({'error': 'days must be greater than zero'}, status=400)
+        try:
+            views = CarsModel.objects.views_count_days(user=user, days=days)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
         return Response({'views': views, 'days': days})
 
 
@@ -44,7 +47,6 @@ class AvgPriceRegionApiView(APIView):
     permission_classes = [IsPremiumSeller]
 
     def get(self, request, *args, **kwargs):
-
         user = request.user
         region = kwargs.get('region', None)
 

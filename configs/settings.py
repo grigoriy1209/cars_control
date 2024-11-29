@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.all_cars.listings',
     'apps.analytics',
     'apps.all_cars.dropout_cars',
+    'apps.payments',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kyiv'
 
 USE_I18N = True
 

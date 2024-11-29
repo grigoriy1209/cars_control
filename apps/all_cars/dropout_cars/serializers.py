@@ -8,9 +8,10 @@ from apps.all_cars.dropout_cars.models import BrandsModel, ModelCar
 
 class ModelSerializer(serializers.ModelSerializer):
     brand = serializers.SlugRelatedField(queryset=BrandsModel.objects.all(), slug_field='title', )
+
     class Meta:
         model = ModelCar
-        fields = ('id', 'model_car', 'brand','created_at', 'updated_at')
+        fields = ('id', 'model_car', 'brand', 'created_at', 'updated_at')
 
     def validate_model_car(self, value):
         if len(value) < 2:
@@ -23,7 +24,7 @@ class ModelSerializer(serializers.ModelSerializer):
         if not brand:
             # EmailService.notify_admin_error_brand()
             raise ValidationError('The brands model cannot be empty.')
-        model = ModelCar.objects.create( **validated_data)
+        model = ModelCar.objects.create(**validated_data)
         return model
 
 

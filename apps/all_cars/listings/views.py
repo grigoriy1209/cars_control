@@ -20,20 +20,18 @@ class CarListCreateView(ListCreateAPIView):
     queryset = CarsModel.objects.all()
 
     def perform_create(self, serializer):
-        car = serializer.save(user=self.request.user,)
-        description = serializer.validated_data.get('description')
-        brand = serializer.validated_data.get('brand')
-        if not brand:
-            raise ValidationError('Brand is required')
-        car.update_status(description)
-        serializer.save(brand_id=brand, user=self.request.user)
+        # car = serializer.save(user=self.request.user,)
+        # # description = serializer.validated_data.get('description')
+        # brand = serializer.validated_data.get('brand')
+        # car.update_status()
+        serializer.save(user=self.request.user)
 
-    def post(self, *args, **kwargs):
-        data = self.request.data
-        serializer = self.serializer_class(data=data, context={'request': self.request})
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def post(self, *args, **kwargs):
+    #     data = self.request.data
+    #     serializer = self.serializer_class(data=data, context={'request': self.request})
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
@@ -42,17 +40,18 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     queryset = CarsModel.objects.all()
 
     def get(self, *args, **kwargs):
-        car = get_object_or_404(CarsModel, pk=self.kwargs['pk'])
+        # car = get_object_or_404(CarsModel, pk=self.kwargs['pk'])
+        car = self.get_object()
         CarsService.increment_view(car)
         serializer = self.get_serializer(car)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def perform_update(self, serializer):
-        car = serializer.instance
-        CarsService.counter_edit_attempts(car)
-        description = serializer.validated_data.get('description')
-        car.update_status(description)
-        serializer.save()
+    # def perform_update(self, serializer):
+    #     car = serializer.instance
+    #     description = serializer.validated_data.get('description')
+    #     car.description = description
+    #     car.update_status()
+    #     serializer.save()
 
 # class CarAddPhotoView(UpdateAPIView):
 #     permission_classes = (IsAuthenticated,)

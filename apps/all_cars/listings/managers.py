@@ -1,10 +1,10 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.db import models
 from django.db.models import Avg, Sum
 from django.utils.timezone import now
 
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 
 class CarQuerySet(models.QuerySet):
@@ -16,6 +16,8 @@ class CarQuerySet(models.QuerySet):
         return self.aggregate(total_views=Sum('views'))['total_views'] or 0
 
     def views_count_days(self, days):
+        if days <=0:
+            raise ValidationError('days cannot be less than zero')
         return self.filter_all_days(days).aggregate(total_views=Sum('views'))['total_views'] or 0
 
     def avg_price_region(self, region):
