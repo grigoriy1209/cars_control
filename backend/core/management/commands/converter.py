@@ -4,7 +4,7 @@ from rest_framework import status
 
 import requests
 
-from apps.payments.models import CurrencyModel
+from apps.payments.models import ExchangeRatesModel
 
 
 class Command(BaseCommand):
@@ -25,18 +25,18 @@ class Command(BaseCommand):
                 exchange_rate = item['sale']  # курс продажі
 
                 if currency_code == 'USD':
-                    currency, created = CurrencyModel.objects.get_or_create(currency='USD')
+                    currency, created = ExchangeRatesModel.objects.get_or_create(currency='USD')
                     currency.course = exchange_rate  # update course
                     currency.save()
                     self.stdout.write(self.style.SUCCESS('Successfully converted currency to USD'))
 
                 elif currency_code == 'EUR':
-                    currency, created = CurrencyModel.objects.get_or_create(currency='EUR')
+                    currency, created = ExchangeRatesModel.objects.get_or_create(currency='EUR')
                     currency.course = exchange_rate
                     currency.save()
                     self.stdout.write(self.style.SUCCESS('Successfully converted currency to EUR'))
                 elif currency_code == 'UAH':
-                    currency, created = CurrencyModel.objects.get_or_create(currency='UAH')
+                    currency, created = ExchangeRatesModel.objects.get_or_create(currency='UAH')
                     currency.course = 1
                     currency.save()
                     self.stdout.write(self.style.SUCCESS('Successfully converted currency to UAH'))

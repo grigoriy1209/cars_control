@@ -40,7 +40,7 @@ class EmailService:
     def recovery_password(cls, user: User):
         token = JWTService.create_token(user, RecoverToken)
         url = f'http://localhost:3000/recovery/{token}'
-        cls.__send_email(
+        cls.__send_email.delay(
             user.email,
             'Recovery PASSWORD',
             {
@@ -52,7 +52,7 @@ class EmailService:
 
     @classmethod
     def notify_manager(cls, user: User):
-        cls.__send_email(
+        cls.__send_email.delay(
             user.email,
             'checking ad',
             {
@@ -64,7 +64,7 @@ class EmailService:
 
     @classmethod
     def notify_admin_error_brand(cls, user: User):
-        cls.__send_email(
+        cls.__send_email.delay(
             user.email,
             'error brand',
             {'name': user.profile.name},

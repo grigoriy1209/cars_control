@@ -1,10 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from core.services.email_service import EmailService
-
 from apps.all_cars.dropout_cars.models import BrandsModel, ModelCar
-from apps.all_cars.listings.choices.status_choice import StatusChoice
 from apps.all_cars.listings.models import CarPhotoModel, CarsModel
 from apps.all_cars.listings.services import CarsService
 
@@ -27,7 +24,9 @@ class CarSerializer(serializers.ModelSerializer):
         model = CarsModel
 
         fields = ('id', 'brand', 'model', 'year',
-                  'mileage', 'price','currency','exchange', 'eco_standard', 'region', 'photos',
+                  'mileage', 'user_price', 'currency',
+                  'exchange_rates','price_in_eur','price_in_usd','price_in_uah',
+                  'eco_standard', 'region', 'photos', 'body_type', 'engine',
                   'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user",
                   "edit_attempts",)
 
@@ -55,7 +54,9 @@ class CarSerializer(serializers.ModelSerializer):
         print(validated_data)
         user = self.context['request'].user
         validated_data.pop('user', None)
+        exchange_rate = validated_data['exchange_rates']
         car = CarsModel(user=user, **validated_data)
+        car.converter_price()
         car.update_status(user=user)
         return car
 

@@ -19,7 +19,7 @@ class ModelCar(BaseModel):
         db_table = 'cars_models'
         ordering = ['id']
 
-    model_car = models.CharField(max_length=25, )
+    model_car = models.CharField(max_length=25,)
     brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='car_models')
 
     def __str__(self):

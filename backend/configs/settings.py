@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'django_celery_results',
     'django_celery_beat',
+    'drf_yasg',
 
     # my_apps
     'core',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'apps.analytics',
     'apps.all_cars.dropout_cars',
     'apps.payments',
+    'apps.dealerships',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +128,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'drf-static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
 MEDIA_URL = '/media/'
 

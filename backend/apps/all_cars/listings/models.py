@@ -10,7 +10,9 @@ from core.services.email_service import EmailService
 
 from apps.all_users.users.models import UserModel
 
+from ...dealerships.models import AutoSaloonModel
 from ...payments.currency_choice import CurrencyChoice
+from ...payments.models import ExchangeRatesModel
 from ..dropout_cars.models import BrandsModel, ModelCar
 from .choices.body_type_choice import BodyTypeChoice
 from .choices.eco_choice import EcologicalStandardTypeChoice
@@ -32,9 +34,14 @@ class CarsModel(BaseModel):
     brand = models.ForeignKey(BrandsModel, on_delete=models.CASCADE, related_name='cars', null=False, blank=False)
     model = models.ForeignKey(ModelCar, on_delete=models.CASCADE, related_name='cars')
     year = models.IntegerField(validators=[V.MinValueValidator(1950), V.MaxValueValidator(datetime.now().year)])
-    price = models.DecimalField(max_digits=10,decimal_places=2,validators=[V.MinValueValidator(0), ])
-    currency = models.CharField(max_length=15, choices=CurrencyChoice.choices)
-    exchange = models.DecimalField(max_digits=10, decimal_places=2)
+
+    user_price = models.DecimalField(max_digits=12, decimal_places=2, )
+    currency = models.CharField(choices=CurrencyChoice.choices, max_length=3)
+    exchange_rates = models.ForeignKey(ExchangeRatesModel, on_delete=models.CASCADE, related_name='cars')
+    price_in_usd = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    price_in_eur = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    price_in_uah = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+
     mileage = models.IntegerField(validators=[V.MinValueValidator(10), V.MaxValueValidator(1_000_000)])
     body_type = models.CharField(max_length=25, choices=BodyTypeChoice.choices)
     engine = models.CharField(max_length=25, choices=EngineTypeChoice.choices)
@@ -44,6 +51,8 @@ class CarsModel(BaseModel):
     status = models.CharField(max_length=20, choices=StatusChoice.choices, default=StatusChoice.PENDING)
     region = models.CharField(max_length=23, validators=[V.RegexValidator(*CarRegex.REGION.value)])
     description = models.TextField(max_length=500, validators=[V.MinLengthValidator(2)], null=False, blank=False)
+    autosaloon = models.ForeignKey(AutoSaloonModel, on_delete=models.CASCADE, related_name='cars', null=True,
+                                   )
     # photo = models.ImageField(upload_to=upload_car_photos, blank=True)
     edit_attempts = models.PositiveIntegerField(default=0)
 
@@ -59,7 +68,7 @@ class CarsModel(BaseModel):
         description_lower = self.description.lower()
         return any(word in description_lower for word in self.foul_words)
 
-    def update_status(self,user):
+    def update_status(self, user):
         if self.validate_foul():
             self.edit_attempts += 1
 
@@ -75,10 +84,18 @@ class CarsModel(BaseModel):
         self.views += 1
         self.save()
 
-    # def get_price(self):
-    #     if self.price:
-    #         return self.price.price
-    #     return self.price if self.price is not None else 0
+    def converter_price(self):
+        latest_rates = self.exchange_rates.get_latest_rates()
+
+        if self.currency == 'USD':
+            self.price_in_uah = self.user_price * latest_rates.usd_to_uah
+            self.price_in_eur = self.user_price * latest_rates.eur_to_uah
+        elif self.currency == 'EUR':
+            self.price_in_uah = self.user_price * latest_rates.eur_to_uah
+            self.price_in_usd = self.user_price * latest_rates.usd_to_eur
+        elif self.currency == 'UAH':
+            self.price_in_usd = self.user_price / latest_rates.usd_to_uah
+            self.price_in_eur = self.user_price / latest_rates.eur_to_uah
 
 
 class CarPhotoModel(BaseModel):

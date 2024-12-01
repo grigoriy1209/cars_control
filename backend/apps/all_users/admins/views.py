@@ -3,6 +3,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.serializers import Serializer
+
+from drf_yasg.utils import swagger_auto_schema
 
 from core.permissions.is_superuser_permission import IsSuperUser
 

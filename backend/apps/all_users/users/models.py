@@ -6,6 +6,7 @@ from core.models import BaseModel
 from apps.all_users.accounts.models import AccountModels
 from apps.all_users.users.choices import UserRoleType
 from apps.all_users.users.managers import UserManager
+from apps.dealerships.models import AutoSaloonModel
 
 
 class UserModel(AbstractBaseUser, BaseModel, PermissionsMixin):
@@ -21,6 +22,8 @@ class UserModel(AbstractBaseUser, BaseModel, PermissionsMixin):
     account = models.OneToOneField('accounts.AccountModels', on_delete=models.CASCADE, related_name='users',
                                    null=True, blank=True)
     # account_type = models.CharField(max_length=20, choices=AccountType.choices, default=AccountType.BASIC.value)
+    autosaloon = models.ForeignKey(AutoSaloonModel, on_delete=models.CASCADE, related_name='users', null=True,
+                                   )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

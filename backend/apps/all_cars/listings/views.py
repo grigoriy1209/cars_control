@@ -1,8 +1,12 @@
+from django.utils.decorators import method_decorator
+
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
+from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from drf_yasg.utils import swagger_auto_schema
 
 from core.pagination import PagePagination
 
@@ -12,6 +16,7 @@ from apps.all_cars.listings.serializers import CarPhotoSerializer, CarSerializer
 from apps.all_cars.listings.services import CarsService
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class CarListCreateView(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
@@ -34,6 +39,7 @@ class CarListCreateView(ListCreateAPIView):
     #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
@@ -52,6 +58,7 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     #     car.description = description
     #     car.update_status()
     #     serializer.save()
+
 
 # class CarAddPhotoView(UpdateAPIView):
 #     permission_classes = (IsAuthenticated,)

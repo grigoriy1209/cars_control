@@ -14,5 +14,11 @@ app.conf.beat_schedule = {
         'task': 'core.services.email_service.spam',
         'schedule': crontab(),
 
+    },
+    'update-exchange-rates-every-day': {
+        'task': 'payments.tasks.update_exchange_rates',
+        'schedule': crontab(minute='0', hour='09',),
     }
+
 }
+app.conf.timezone = 'UTC'
