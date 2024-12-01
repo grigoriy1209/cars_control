@@ -29,7 +29,12 @@ class CarListCreateView(ListCreateAPIView):
         # # description = serializer.validated_data.get('description')
         # brand = serializer.validated_data.get('brand')
         # car.update_status()
-        serializer.save(user=self.request.user)
+        if 'auto_saloon' in self.request.data:
+            auto_saloon = self.request.data['auto_saloon']
+            serializer.save(auto_saloon=auto_saloon)
+        else:
+            serializer.save(auto_saloon=None, user=self.request.user)
+        serializer = self.get_serializer(data=serializer.data, context={'request': self.request})
 
     # def post(self, *args, **kwargs):
     #     data = self.request.data

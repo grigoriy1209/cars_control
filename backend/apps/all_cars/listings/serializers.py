@@ -25,9 +25,9 @@ class CarSerializer(serializers.ModelSerializer):
 
         fields = ('id', 'brand', 'model', 'year',
                   'mileage', 'user_price', 'currency',
-                  'exchange_rates','price_in_eur','price_in_usd','price_in_uah',
+                  'exchange_rates', 'price_in_eur', 'price_in_usd', 'price_in_uah',
                   'eco_standard', 'region', 'photos', 'body_type', 'engine',
-                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user",
+                  'checkpoint', 'color', 'status', 'created_at', 'updated_at', 'description', "user", 'auto_saloon',
                   "edit_attempts",)
 
         read_only_fields = ('created_at', 'updated_at', 'id', 'status', "user", "edit_attempts",)
@@ -39,6 +39,7 @@ class CarSerializer(serializers.ModelSerializer):
         print(data)
         user = self.context['request'].user
         description = data.get('description', '')
+
         # car = self.instance
         if any(word in description.lower() for word in CarsModel.foul_words):
             raise ValidationError({'description': 'This field cannot be empty.'})
@@ -54,6 +55,7 @@ class CarSerializer(serializers.ModelSerializer):
         print(validated_data)
         user = self.context['request'].user
         validated_data.pop('user', None)
+        auto_saloon = validated_data.get('auto_saloon', None)
         exchange_rate = validated_data['exchange_rates']
         car = CarsModel(user=user, **validated_data)
         car.converter_price()
