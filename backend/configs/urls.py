@@ -35,15 +35,24 @@ schema_view = get_schema_view(
     permission_classes=(AllowAny,),
 )
 urlpatterns = [
+    # users
     path('api/all_users/users', include('apps.all_users.users.urls')),
-    path('api/api/all_users/admins', include('apps.all_users.admins.urls')),
+    path('api/all_users/admins', include('apps.all_users.admins.urls')),
     path('api/all_users/auth', include('apps.all_users.auth.urls')),
     path('api/all_users/accounts', include('apps.all_users.accounts.urls')),
+    # cars
     path('api/all_cars/listings', include('apps.all_cars.listings.urls')),
+    path('api/all_cars/dropout_cars/', include('apps.all_cars.dropout_cars.urls')),
+
     path('api/analytics', include('apps.analytics.urls')),
     path('api/payments', include('apps.payments.urls')),
-    path('api/all_cars/dropout_cars/', include('apps.all_cars.dropout_cars.urls')),
-    path('api/dealerships/', include('apps.dealerships.urls')),
+
+    path('api/partners/dealerships/', include('apps.partners.dealerships.urls')),
+    path('api/partners/dealerships/dealer/', include('apps.partners.dealer_admin.urls')),
+    path('api/partners/dealerships/dealer/', include('apps.partners.dealer_manager.urls')),
+    path('api/partners/dealerships/dealer/', include('apps.partners.dealer_mechanic.urls')),
+    path('api/partners/dealerships/dealer/', include('apps.partners.dealer_seller.urls')),
+
     path('api/doc', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 

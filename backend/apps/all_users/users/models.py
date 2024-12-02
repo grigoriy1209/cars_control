@@ -6,7 +6,7 @@ from core.models import BaseModel
 from apps.all_users.accounts.models import AccountModels
 from apps.all_users.users.choices import UserRoleType
 from apps.all_users.users.managers import UserManager
-from apps.dealerships.models import AutoSaloonModel
+from apps.partners.dealerships.models import AutoSaloonModel
 
 
 class UserModel(AbstractBaseUser, BaseModel, PermissionsMixin):

@@ -14,9 +14,11 @@ class ModelSerializer(serializers.ModelSerializer):
         fields = ('id', 'model_car', 'brand', 'created_at', 'updated_at')
 
     def validate_model_car(self, value):
-        if len(value) < 2:
-            EmailService.notify_admin_error_brand(value)
-            raise ValidationError('The model car cannot be empty.')
+        if not value:
+            admin_user = self.context.get('manager')
+            if admin_user:
+                EmailService.notify_admin_error_brand(value)
+            raise ValidationError('The title cannot be empty.')
         return value
 
     def create(self, validated_data):
@@ -38,6 +40,8 @@ class BrandSerializer(serializers.ModelSerializer):
 
     def validate_title(self, value):
         if not value:
-            EmailService.notify_admin_error_brand(value)
+            admin_user = self.context.get('manager')
+            if admin_user:
+                EmailService.notify_admin_error_brand(value)
             raise ValidationError('The title cannot be empty.')
         return value

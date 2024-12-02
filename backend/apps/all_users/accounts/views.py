@@ -18,6 +18,7 @@ UserModel = get_user_model()
 class UserToPremiumAccountView(GenericAPIView):
     permission_classes = [IsManagerOrAdmin,]
     queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)
@@ -44,6 +45,9 @@ class UserToPremiumAccountView(GenericAPIView):
 class PremiumToBasicAccountView(GenericAPIView):
     permission_classes = [IsManagerOrAdmin]
     queryset = UserModel.objects.all()
+
+    def get_serializer_class(self):
+        pass
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)

@@ -5,6 +5,8 @@ from rest_framework.generics import CreateAPIView, GenericAPIView, RetrieveUpdat
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from core.permissions.is_superuser_permission import IsSuperUser
+
 from apps.all_users.users.serializers import UserSerializer
 
 UserModel = get_user_model()
@@ -21,7 +23,7 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     queryset = UserModel.objects.all()
 
-    permission_classes = [AllowAny,]
+    permission_classes = [IsSuperUser,]
 
 
 class MeInfoView(GenericAPIView):

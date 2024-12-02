@@ -2,12 +2,12 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, get_object_or_404
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from core.dataclasses.user_dataclass import User
 from core.services.email_service import EmailService
-from core.services.jwt_service import ActivateToken, JWTService, RecoverToken
+from core.services.jwt_service import ActivateToken, JWTService, RecoverToken, SocketToken
 
 from apps.all_users.auth.serializers import EmailSerializer, PasswordSerializer
 from apps.all_users.users.serializers import UserSerializer
@@ -17,6 +17,9 @@ UserModel: User = get_user_model()
 
 class ActivateUserView(GenericAPIView):
     permission_classes = (AllowAny,)
+
+    def get_serializer_class(self):
+        pass
 
     def patch(self, *args, **kwargs):
         token = kwargs['token']
@@ -52,4 +55,12 @@ class RecoveryPasswordView(GenericAPIView):
         user = JWTService.verify_token(token, RecoverToken)
         user.set_password(serializer.data['password'])
         user.save()
-        return Response({'detail':"your password has been reset."}, status=status.HTTP_200_OK)
+        return Response({'detail': "your password has been reset."}, status=status.HTTP_200_OK)
+
+
+class SocketTokenView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, *args, **kwargs):
+        token = JWTService.create_token(user=self.request.user, token_class=SocketToken)
+        return Response({"token": str(token)}, status=status.HTTP_200_OK)

@@ -10,7 +10,7 @@ from core.services.email_service import EmailService
 
 from apps.all_users.users.models import UserModel
 
-from ...dealerships.models import AutoSaloonModel
+from ...partners.dealerships.models import AutoSaloonModel
 from ...payments.currency_choice import CurrencyChoice
 from ...payments.models import ExchangeRatesModel
 from ..dropout_cars.models import BrandsModel, ModelCar
@@ -71,7 +71,6 @@ class CarsModel(BaseModel):
     def update_status(self, user):
         if self.validate_foul():
             self.edit_attempts += 1
-
             if self.edit_attempts >= 3:
                 self.status = StatusChoice.INACTIVE
                 EmailService.notify_manager(user)

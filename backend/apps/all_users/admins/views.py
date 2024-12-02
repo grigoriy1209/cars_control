@@ -3,9 +3,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer
-
-from drf_yasg.utils import swagger_auto_schema
 
 from core.permissions.is_superuser_permission import IsSuperUser
 
@@ -18,6 +15,7 @@ UserModel = get_user_model()
 class UserBanView(GenericAPIView):
     permission_classes = [IsSuperUser]
     queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)
@@ -34,6 +32,9 @@ class UserBanView(GenericAPIView):
 class UserUnbanView(GenericAPIView):
     permission_classes = [IsSuperUser, ]
     queryset = UserModel.objects.all()
+
+    def get_serializer_class(self):
+        pass
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)
@@ -73,6 +74,9 @@ class UserToManagerView(GenericAPIView):
 class ManagerToUserView(GenericAPIView):
     permission_classes = (IsSuperUser,)
     queryset = UserModel.objects.all()
+
+    def get_serializer_class(self):
+        pass
 
     def get_queryset(self):
         return super().get_queryset().exclude(id=self.request.user.id)

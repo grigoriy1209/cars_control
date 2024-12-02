@@ -1,13 +1,16 @@
 import os
 
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import get_template
+
+from celery import shared_task
 
 from core.dataclasses.user_dataclass import User
 from core.services.jwt_service import ActivateToken, JWTService, RecoverToken
 
 from apps.all_users.users.models import UserModel
 
+from configs import settings
 from configs.celery import app
 
 
@@ -62,18 +65,19 @@ class EmailService:
             'checking_ad.html',
         )
 
-    @classmethod
-    def notify_admin_error_brand(cls, user: User):
-        cls.__send_email.delay(
-            user.email,
-            'error brand',
-            {'name': user.profile.name},
-            'brand_not.html',
+    @shared_task
+    def notify_admin_error_brand():
+        recipient_list = ['grigoriyvorobiov1@gmail.com', ]
+        send_mail(
+            "Brand not found",
+            'A brand not found for the request name',
+            'grigoriyv1209@gmail.com',
+            recipient_list,
+            fail_silently=False,
         )
 
     @staticmethod
     @app.task
     def spam():
         for user in UserModel.objects.all():
-            EmailService.__send_email(user.email, 'Spam', {},'spam.html')
-
+            EmailService.__send_email(user.email, 'Spam', {}, 'spam.html')

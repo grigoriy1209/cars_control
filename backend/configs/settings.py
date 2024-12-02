@@ -32,6 +32,7 @@ AUTH_USER_MODEL = 'users.UserModel'
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
 
     # my_apps
     'core',
+    'apps.chat',
     'apps.all_users.users',
     'apps.all_users.accounts',
     'apps.all_users.admins',
@@ -52,7 +54,14 @@ INSTALLED_APPS = [
     'apps.analytics',
     'apps.all_cars.dropout_cars',
     'apps.payments',
-    'apps.dealerships',
+    'apps.partners.dealerships',
+
+    # dealers
+    'apps.partners.dealer_admin',
+    'apps.partners.dealer_seller',
+    'apps.partners.dealer_mechanic',
+    'apps.partners.dealer_manager',
+
 ]
 
 MIDDLEWARE = [
@@ -80,6 +89,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'configs.wsgi.application'
+ASGI_APPLICATION = 'configs.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

@@ -1,3 +1,5 @@
+
+
 from django.utils.decorators import method_decorator
 
 from rest_framework import status
@@ -57,12 +59,13 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(car)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def perform_update(self, serializer):
-    #     car = serializer.instance
-    #     description = serializer.validated_data.get('description')
-    #     car.description = description
-    #     car.update_status()
-    #     serializer.save()
+    def perform_update(self, serializer):
+        car = serializer.instance
+        description = serializer.validated_data.get('description')
+        car.description = description
+        user = self.request.user
+        car.update_status(user)
+        serializer.save()
 
 
 # class CarAddPhotoView(UpdateAPIView):

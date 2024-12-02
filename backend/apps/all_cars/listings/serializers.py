@@ -40,14 +40,14 @@ class CarSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         description = data.get('description', '')
 
-        # car = self.instance
+        car = self.instance
         if any(word in description.lower() for word in CarsModel.foul_words):
             raise ValidationError({'description': 'This field cannot be empty.'})
 
-        # if car and car.edit_attempts >= 3:
-        #     if car.update_status == StatusChoice.INACTIVE:
-        #         raise serializers.ValidationError({'detail': 'you have exceeded the number of edit attempts'})
+        # if car and car.status == StatusChoice.INACTIVE:
         #     EmailService.notify_manager()
+        #     raise serializers.ValidationError({'detail': 'you have exceeded the number of edit attempts'})
+            
         CarsService.account_limit(user, data)
         return data
 
@@ -63,7 +63,11 @@ class CarSerializer(serializers.ModelSerializer):
         return car
 
     def update(self, instance, validated_data):
-        instance.description = validated_data.get('description', instance.description)
-        # CarsService.counter_edit_attempts(instance)
+        description = validated_data.get('description', instance.description)
+        instance.description = description
+
+        if instance.description != description:
+            CarsService.counter_edit_attempts(instance)
+
         instance.update_status(user=instance.user)
         return super().update(instance, validated_data)

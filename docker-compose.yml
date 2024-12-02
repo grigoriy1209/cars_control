@@ -10,7 +10,7 @@ services:
 #      - "8888:8000"
     restart: on-failure
     command: >
-      sh -c "python manage.py wait_db && python manage.py runserver 0.0.0.0:8000 && python manege.py converter"
+      sh -c "python manage.py wait_db && python manage.py runserver 0.0.0.0:8000 && python manage.py converter"
 
   db:
     image: mysql:8
@@ -45,5 +45,5 @@ services:
     restart: on-failure
     command: >  
       sh -c "celery -A configs worker -l info"
-      sh -c "celery -A configs worker -l info -B"
+#      sh -c "celery -A configs worker -l info -B"
 

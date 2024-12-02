@@ -11,7 +11,7 @@ class AutoSaloonModel(BaseModel):
     description = models.TextField(max_length=500)
     address = models.TextField(max_length=100)
 
-    owner = models.ForeignKey('users.UserModel', on_delete=models.CASCADE, related_name='auto_saloons')
+    user = models.ForeignKey('users.UserModel', on_delete=models.CASCADE, related_name='auto_saloons')
 
     def __str__(self):
         return self.name

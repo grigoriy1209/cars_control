@@ -3,6 +3,8 @@ import uuid
 
 from rest_framework.exceptions import ValidationError
 
+from apps.all_cars.listings.choices.status_choice import StatusChoice
+
 
 class CarsService:
     @staticmethod
@@ -24,14 +26,16 @@ class CarsService:
     #                 {"detail": {"The mask is saved, but you need to edit it, otherwise the manager will delete it"}})
     #     return description
 
-    # @staticmethod
-    # def counter_edit_attempts(car):
-    #     if car.validate_foul(car.description):
-    #         if car.edit_attempts >= 3:
-    #             car.status = StatusChoice.INACTIVE
-    #     else:
-    #         car.status = StatusChoice.ACTIVE
-    #     car.save()
+    @staticmethod
+    def counter_edit_attempts(car):
+        if car.validate_foul():
+            car.edit_attempts += 1
+            if car.edit_attempts >= 3:
+                car.status = StatusChoice.INACTIVE
+        else:
+            car.status = StatusChoice.ACTIVE
+            car.edit_attempts = 0
+        car.save()
 
     # @staticmethod
     # def edit_car(car, new_description: str):
