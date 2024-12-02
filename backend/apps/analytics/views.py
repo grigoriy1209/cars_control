@@ -10,6 +10,9 @@ from apps.all_users.users.permissions import IsPremiumSeller
 class ViewsCountApiView(APIView):
     permission_classes = (IsStaff,)
 
+    def get_serializer_class(self):
+        pass
+
     def get(self, request, *args, **kwargs):
         user = request.user
         total_views = CarsModel.objects.views_count(user=user)
@@ -18,6 +21,9 @@ class ViewsCountApiView(APIView):
 
 class ViewsByDaysApiView(APIView):
     permission_classes = (IsPremiumSeller,)
+
+    def get_serializer_class(self):
+        pass
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -34,6 +40,9 @@ class ViewsByDaysApiView(APIView):
 class ViewsCountForCarsApiView(APIView):
     permission_classes = (IsPremiumSeller,)
 
+    def get_serializer_class(self):
+        pass
+
     def get(self, request, *args, **kwargs):
         user = request.user
 
@@ -46,6 +55,9 @@ class ViewsCountForCarsApiView(APIView):
 class AvgPriceRegionApiView(APIView):
     permission_classes = [IsPremiumSeller]
 
+    def get_serializer_class(self):
+        pass
+
     def get(self, request, *args, **kwargs):
         user = request.user
         region = kwargs.get('region', None)
@@ -56,6 +68,9 @@ class AvgPriceRegionApiView(APIView):
 
 class AvgPriceRegionsView(APIView):
     permission_classes = [IsPremiumSeller, ]
+
+    def get_serializer_class(self):
+        pass
 
     def get(self, request, *args, **kwargs):
         user = request.user

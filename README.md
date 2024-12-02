@@ -45,6 +45,13 @@ payments, and more.
 6. Run the development server:
    poetry run manage.py runserver
 
+## Importing Postman Collection
+1. Open Postman.
+2. Click on "Import" in the top-left corner.
+3. Select the file located at `postman_colection.json`.
+4. Import and use the API collection for testing.
+
+
 ### API Documentation 
 The API documentation is available through Swagger UI:
 - API Documentation: http://localhost:8000/api/doc
@@ -82,4 +89,15 @@ The API documentation is available through Swagger UI:
 - Dealer Manager: /api/partners/dealerships/dealer/
 - Dealer Mechanic: /api/partners/dealerships/dealer/
 - Dealer Seller: /api/partners/dealerships/dealer/
+
+## Running Tests in Docker
+```bash
+docker-compose up -d
+
+Run Test
+- docker-compose exec <container_name> pytest
+
+
+
+
 

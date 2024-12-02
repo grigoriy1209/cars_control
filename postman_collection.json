@@ -1,0 +1,1616 @@
+{
+	"info": {
+		"_postman_id": "dc315b94-a779-4c90-87d5-79acec21fc8d",
+		"name": "cars_control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32235253"
+	},
+	"item": [
+		{
+			"name": "all_users_info",
+			"item": [
+				{
+					"name": "admins",
+					"item": [
+						{
+							"name": "ban_user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/all_users/admins/:id/ban",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"admins",
+										":id",
+										"ban"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unban_user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/admins/:id/unban",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"admins",
+										":id",
+										"unban"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user_to_manager",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/admins/:id/to_manager",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"admins",
+										":id",
+										"to_manager"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "manager_to_user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/admins/:id/manager_to_user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"admins",
+										":id",
+										"manager_to_user"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "create_user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"12sr2dd8w@gmail.com\",\r\n    \"password\": \"admin\",\r\n    \"roles\": \"BUYER\",\r\n    \"account\":{},\r\n    \"profile\": {\r\n        \"name\": \"Grigoriy\",\r\n        \"surname\": \"Vorobiov\",\r\n        \"age\": 32,\r\n        \"phone\": \"+380631224947\"\r\n    }\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/all_users/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update_retrive_destroy_user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"qwerty@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/all_users/users/:id/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"users",
+										":id",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "me_info",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/users/me_info",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"users",
+										"me_info"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "test_email",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/users/test",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"users",
+										"test"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "refresh",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "refresh",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMTg2MzE2MCwiaWF0IjoxNzMxODYxOTYwLCJqdGkiOiI2NjNlNTQwNWM4ZTI0NDA5YmY3YWNkMTQ0MDczNDk3NiIsInVzZXJfaWQiOjN9.yjTBm3c6naq4eAKfJwVrf87qoZ4jGWfk9Wpi5b5rsjo\n",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/all_users/auth/refresh",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json()\r",
+											"\r",
+											"pm.environment.set(\"access\",res.access);\r",
+											"pm.environment.set(\"refresh\", res.refresh);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "super@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "super",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "super@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "password",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "superadmin@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "382@1gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "Grigoriyv1209@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/all_users/auth",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "activate_user",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/auth/activate/:token",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth",
+										"activate",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWN0aXZhdGUiLCJleHAiOjE3MzI0ODExMDQsImlhdCI6MTczMjQ3OTkwNCwianRpIjoiYTIxYzljOWUzMTM1NGVjOGJiZTdiOTU4NmQzNTc0Y2YiLCJ1c2VyX2lkIjozNX0.Z9K5UQoQeZ1Zxg2sgC8FVswUvg83Dsv38KaFIaUQpuw"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "recovery_request_password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "grigoriyv1209@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/all_users/auth/recovery",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth",
+										"recovery"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update_password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "grigoriyv1209@gmail.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "password",
+											"value": "superuser",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/all_users/auth/recovery/:token",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth",
+										"recovery",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVjb3ZlcnlfcGFzc3dvcmQiLCJleHAiOjE3MzI0ODM0ODMsImlhdCI6MTczMjQ4Mjg4MywianRpIjoiN2IxMzY5OTVkNmU2NDY4MmI4ZGFkYzYzODkxMDIzOTYiLCJ1c2VyX2lkIjozNX0.t567Z8v11Lt7bD0324rzRg9XTA6nGId9bcmZufRlEH4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_socket_token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const res = pm.response.json()\r",
+											"\r",
+											"pm.environment.set(\"socket_tocken\",res.token)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/auth/socket",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"auth",
+										"socket"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "accounts",
+					"item": [
+						{
+							"name": "account_to_premium",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/accounts/:id/user_to_premium",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"accounts",
+										":id",
+										"user_to_premium"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "account_to_basic",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_users/accounts/:id/premium_to_basic",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_users",
+										"accounts",
+										":id",
+										"premium_to_basic"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Cars_info",
+			"item": [
+				{
+					"name": "dpopout",
+					"item": [
+						{
+							"name": "Brand_viewSet",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\":\"Jeep\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/all_cars/dropout_cars/brands/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_cars",
+										"dropout_cars",
+										"brands",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Model_viewSet",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"model_car\":\"A6\",\r\n    \"brand\":\"Opel\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/all_cars/dropout_cars/models/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_cars",
+										"dropout_cars",
+										"models",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "found_brand_title",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_cars/dropout_cars/brands/Jeep/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_cars",
+										"dropout_cars",
+										"brands",
+										"Jeep",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "found_model_car",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/all_cars/dropout_cars/models/daaa/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"all_cars",
+										"dropout_cars",
+										"models",
+										"daaa",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "exchange",
+					"item": [
+						{
+							"name": "currency",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/payments/exchange-rates",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"payments",
+										"exchange-rates"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "car_create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"brand\": \"Lada\",\r\n  \"model\": \"Qwe12\",\r\n  \"year\": 2020,\r\n  \"currency\":\"USD\",\r\n  \"price\": 15000,\r\n  \"body_type\":\"crossover\",\r\n   \"eco_standard\":\"evro-6\",\r\n  \"color\": \"White\",\r\n  \"engine\": \"flat\",\r\n  \"mileage\": 25000,\r\n  \"region\":\"Jitomir\",\r\n  \"checkpoint\":\"manual\",\r\n  \"description\":\"cbbcbjcs jcscjscjsk\"\r\n\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/all_cars/listings",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "info_all_cars",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/all_cars/listings",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "id_car_info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch_update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"color\":\"gren\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "35"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_all_car",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n   { \"brand\":\"reno\",\r\n    \"model\":\"12@#\",\r\n    \"year\":232,\r\n    \"mileage\":123323,\r\n    \"price\"\t:12233,\r\n    \"currency\":\"USD\",\r\n    \"body_type\":\"crossover\",\r\n    \"region\":\"jitomir\",\r\n    \"engine\":\"inline\",\r\n    \"eco_standard\":\"r-6\",\r\n    \"checkpoint\":\"manual\",\r\n    \"color\":\"red\" \r\n     }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_car",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_photo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1ef24c79-3812-4160-98d6-20334e7fbaa1",
+										"postman-cloud:///1ef24d56-71b6-4fa0-b2fb-c10bf662d856",
+										"postman-cloud:///1ef24db2-8319-42f0-9f41-27c4c43e48dc"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id/photos",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id",
+								"photos"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_many_photos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photos",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1ef24db2-8319-42f0-9f41-27c4c43e48dc",
+										"postman-cloud:///1ef24d56-71b6-4fa0-b2fb-c10bf662d856",
+										"postman-cloud:///1ef24c79-3812-4160-98d6-20334e7fbaa1"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/all_cars/listings/:id/photos",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"all_cars",
+								"listings",
+								":id",
+								"photos"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "analytics",
+			"item": [
+				{
+					"name": "avg_price_region",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/analytics/avg_price/region/jitomir",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"analytics",
+								"avg_price",
+								"region",
+								"jitomir"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "avg_price_all_regions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/analytics/avg_price/all-regions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"analytics",
+								"avg_price",
+								"all-regions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "count_views",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/analytics/views/count",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"analytics",
+								"views",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "count_views_by_days",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/analytics/views/count/152",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"analytics",
+								"views",
+								"count",
+								"152"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "counte_views_id_car",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/analytics/views/car/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"analytics",
+								"views",
+								"car",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "45"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "dealership",
+			"item": [
+				{
+					"name": "cars_autosalons_to_id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Toyota Avto\",\r\n    \"description\":\"Top_tachki\",\r\n    \"address\":\"za_kladovischem_na_pravo\",\r\n    \"owner\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/partners/dealerships/dealers/2/cars/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"partners",
+								"dealerships",
+								"dealers",
+								"2",
+								"cars",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_autosaloon",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"MAsDa Centr\",\r\n    \"description\":\"verygood cars\",\r\n    \"address\":\"Jitomir\",\r\n    \"user\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/dealerships/dealers/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"dealerships",
+								"dealers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_dealer_admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Petro\",\r\n    \"surname\":\"Pupkin\",\r\n    \"age\":23\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/partners/dealerships/dealer/dealer-admin/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"partners",
+								"dealerships",
+								"dealer",
+								"dealer-admin",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_dealer_manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Albert\",\r\n    \"surname\":\"Petrov\",\r\n    \"age\":24\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/partners/dealerships/dealer/dealer-manager/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"partners",
+								"dealerships",
+								"dealer",
+								"dealer-manager",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_dealer_mechanic",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Anton\",\r\n    \"surname\":\"Feriv\",\r\n    \"age\":23\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/partners/dealerships/dealer/dealer-mechanic/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"partners",
+								"dealerships",
+								"dealer",
+								"dealer-mechanic",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_dealer_seller",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Anton\",\r\n    \"surname\":\"Petrov\",\r\n    \"age\":89\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/partners/dealerships/dealer/dealer-seller/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"partners",
+								"dealerships",
+								"dealer",
+								"dealer-seller",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,11 +1,9 @@
-
-
 from django.utils.decorators import method_decorator
 
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from drf_yasg.utils import swagger_auto_schema
@@ -20,11 +18,20 @@ from apps.all_cars.listings.services import CarsService
 
 @method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class CarListCreateView(ListCreateAPIView):
+    """"
+        get: list all cars
+        post: create a new car
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
     pagination_class = PagePagination
     filter_classes = (CarFilter,)
     queryset = CarsModel.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return (IsAuthenticated(),)
 
     def perform_create(self, serializer):
         # car = serializer.save(user=self.request.user,)
@@ -48,9 +55,20 @@ class CarListCreateView(ListCreateAPIView):
 
 @method_decorator(name='get', decorator=swagger_auto_schema(security=[]))
 class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """
+    get:list details of a car
+    put:update details of a car
+    patch:update details of a car
+    delete:delete a car
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = CarSerializer
     queryset = CarsModel.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return (IsAuthenticated(),)
 
     def get(self, *args, **kwargs):
         # car = get_object_or_404(CarsModel, pk=self.kwargs['pk'])
@@ -81,6 +99,9 @@ class CarListRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 class CarAddPhotosView(CreateAPIView):
+    """
+    post: add photos to car
+    """
     permission_classes = [IsAuthenticated, ]
     queryset = CarsModel.objects.all()
 

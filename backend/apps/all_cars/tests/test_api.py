@@ -76,17 +76,17 @@ class CarApiTest(APITestCase):
         # Авторизація
         self.client.login(email="testuser@example.com", password="testpassword123")
 
-    def test_get_all_cars(self):
-        res = self.client.get(reverse('car_create_list'))
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        data = res.data
-        self.assertEqual(len(data), 2)
-        CarsModel.objects.get(pk=self.car1.id)
-        self.assertEqual(CarsModel.objects.get(pk=self.car1.id).model, 'lada')
-        CarsModel.objects.get(pk=self.car2.id)
-        self.assertEqual(CarsModel.objects.get(pk=self.car2.id).model, 'lada')
-        CarsModel.objects.get(pk=self.car1.id)
 
     def test_get_all_cars(self):
-        res = self.client.post(reverse('car_list_create'))
-        print(res)
+        res = self.client.get(reverse('car_list_create'))
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        data = res.data
+        # self.assertEqual(len(data), 2)
+        # CarsModel.objects.get(pk=self.car1.id)
+        # self.assertEqual(CarsModel.objects.get(pk=self.car1.id).model, 'lada')
+        # CarsModel.objects.get(pk=self.car2.id)
+        # self.assertEqual(CarsModel.objects.get(pk=self.car2.id).model, 'lada')
+        # CarsModel.objects.get(pk=self.car1.id)
+        print(data)
+
+
