@@ -45,25 +45,25 @@ payments, and more.
 6. Run the development server:
    poetry run manage.py runserver
 
-API Documentation 
+### API Documentation 
 The API documentation is available through Swagger UI:
  API Documentation: http://localhost:8000/api/doc
 
-Dependencies:
+### Dependencies:
 # Main dependencies:
--django
--djangorestframework
--mysqlclient
--celery
--redis
--chanel-redis
--daphne
-
+- django
+- djangorestframework
+- mysqlclient
+- celery
+- redis
+- chanel-redis
+- daphne
+ 
 # Development dependencies:
--isort
--pytest
+- isort
+- pytest
 
-API Endpoints
+### API Endpoints
 # Users
 - all_users: /api/all_users/users
 - admins: /api/all_users/admins
