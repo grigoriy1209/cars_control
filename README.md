@@ -47,7 +47,7 @@ payments, and more.
 
 ### API Documentation 
 The API documentation is available through Swagger UI:
- API Documentation: http://localhost:8000/api/doc
+- API Documentation: http://localhost:8000/api/doc
 
 ### Dependencies:
 # Main dependencies:
