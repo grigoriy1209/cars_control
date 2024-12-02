@@ -5,8 +5,8 @@ payments, and more.
 
 ## Technologies
 
--**Django** - web framework for Python used to build the backend.
--**Django Rest Framework** - For building RESTful APIs.
+- **Django** - web framework for Python used to build the backend.
+- **Django Rest Framework** - For building RESTful APIs.
 
 - **MySQL** - A relational database for storing data about users, cars, and other resources.
 - **Celery** - For handling asynchronous tasks like processing emails or long-running operations.
@@ -33,13 +33,13 @@ payments, and more.
 3. Build and start the Docker containers:
   docker compose up --build
 4. Set up environment variables(create a .env file):
-      DEBUG=True
-      SECRET_KEY=
-      MYSQL_DATABASE=
-      MYSQL_USER=
-      MYSQL_PASSWORD=
-      MYSQL_HOST=
-      MYSQL_PORT=
+     **DEBUG=True**
+     **SECRET_KEY=**
+     **MYSQL_DATABASE=**
+     **MYSQL_USER=**
+     **MYSQL_PASSWORD=**
+     **MYSQL_HOST=**
+     **MYSQL_PORT=**
 5. Apply database migrations:
    poetry run python manage.py migrate
 6. Run the development server:
