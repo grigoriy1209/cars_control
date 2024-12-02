@@ -76,7 +76,6 @@ class CarApiTest(APITestCase):
         # Авторизація
         self.client.login(email="testuser@example.com", password="testpassword123")
 
-
     def test_get_all_cars(self):
         res = self.client.get(reverse('car_create_list'))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
